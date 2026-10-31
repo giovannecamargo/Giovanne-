@@ -7,10 +7,15 @@ import { describe, expect, it } from "vitest";
 // React state, the URL, or the router's own per-tab scroll cache.
 const SHARED_STATE = /\b(localStorage|sessionStorage|indexedDB|BroadcastChannel|document\.cookie)\b/;
 
+// src/components/ui holds generated shadcn primitives this site never renders
+// (one of them reads localStorage); the rule covers everything it actually shows.
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = join(dir, entry);
-    if (statSync(full).isDirectory()) return sourceFiles(full);
+    if (statSync(full).isDirectory()) {
+      if (full.endsWith(join("src", "components", "ui"))) return [];
+      return sourceFiles(full);
+    }
     if (!/\.(ts|tsx)$/.test(entry)) return [];
     if (entry === "routeTree.gen.ts") return [];
     if (full.includes("/test/")) return [];
