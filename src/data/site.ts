@@ -45,3 +45,4 @@ export const nav = [
   { to: "/galeria", label: "Galeria" },
   { to: "/contato", label: "Contato" },
 ] as const;
+
