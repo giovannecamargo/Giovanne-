@@ -80,7 +80,7 @@ function Hero() {
       <img
         src={photos.palco}
         alt="Giovanne Camargo cantando ao vivo com violão"
-        className="absolute inset-y-0 right-0 h-full w-full object-cover object-top opacity-70 md:w-[65%] md:opacity-100"
+        className="absolute inset-y-0 right-0 h-full w-full object-cover object-top opacity-70 md:w-[65%] md:opacity-100 md:[mask-image:linear-gradient(to_right,transparent,black_35%)]"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent md:via-background/40" />
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
