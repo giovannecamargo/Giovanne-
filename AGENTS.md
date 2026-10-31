@@ -9,6 +9,10 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
+## Brand assets
+
+Use the shared Logo component for header and footer branding, with uploaded media referenced through Lovable Assets pointers; derive the favicon from the same logo to keep the brand consistent.
+
 ## Browser tabs stay independent
 
 Never persist interface state (current page, scroll position, menu, lightbox) to

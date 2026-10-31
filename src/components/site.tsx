@@ -4,6 +4,7 @@ import {
   Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote,
 } from "lucide-react";
 import { events, gallery, nav, partners, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
+import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
 export const btnGold = "inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition duration-300 hover:brightness-110";
 export const btnOutline = "inline-flex items-center justify-center gap-2 rounded-md border border-primary/70 px-6 py-3 text-sm font-medium text-foreground transition duration-300 hover:bg-primary/10";
@@ -12,11 +13,8 @@ const d = (i: number) => ({ "--d": `${i * 90}ms` }) as CSSProperties;
 
 export function Logo() {
   return (
-    <Link to="/" className="flex flex-col leading-none" aria-label="Giovanne Camargo — início">
-      <span className="font-display text-[10px] tracking-[0.45em] text-muted-foreground">GIOVANNE</span>
-      <span className="font-display text-xl font-extrabold tracking-wide text-foreground">
-        CAMARGO<span className="text-primary">★</span>
-      </span>
+    <Link to="/" className="block w-[170px] shrink-0 sm:w-[190px]" aria-label="Giovanne Camargo — início">
+      <img src={logoAsset.url} alt="Giovanne Camargo" width={1110} height={380} className="block h-auto w-full object-contain" />
     </Link>
   );
 }
