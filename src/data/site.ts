@@ -38,10 +38,10 @@ export const partners: { name: string; logo: string }[] = [];
 export const videos: string[] = [];
 
 export const nav = [
-  { href: "#inicio", label: "Início" },
-  { href: "#sobre", label: "Sobre" },
-  { href: "#agenda", label: "Agenda" },
-  { href: "#shows", label: "Shows" },
-  { href: "#galeria", label: "Galeria" },
-  { href: "#contato", label: "Contato" },
-];
+  { to: "/", label: "Início" },
+  { to: "/sobre", label: "Sobre" },
+  { to: "/agenda", label: "Agenda" },
+  { to: "/shows", label: "Shows" },
+  { to: "/galeria", label: "Galeria" },
+  { to: "/contato", label: "Contato" },
+] as const;
