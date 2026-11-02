@@ -40,6 +40,23 @@ export function usePhotos(section: "shows" | "galeria") {
   });
 }
 
+// Turn whatever the admin typed into a safe http(s) destination, or null when there is
+// nothing usable. Bare domains ("instagram.com/abc") get https://; anything that would
+// run as a script (javascript:, data:) or points at no real host is dropped.
+export function normalizeSponsorLink(raw: string | null | undefined): string | null {
+  const value = (raw ?? "").trim();
+  if (!value) return null;
+  const candidate = /^[a-z][a-z0-9+.-]*:\/\//i.test(value) ? value : `https://${value}`;
+  try {
+    const url = new URL(candidate);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+    if (!url.hostname.includes(".")) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 export function useActiveSponsors() {
   return useQuery({
     queryKey: ["sponsors", "active"],
@@ -48,7 +65,7 @@ export function useActiveSponsors() {
       const { data, error } = await supabase.from("sponsors").select("*").lte("starts_at", now).gt("ends_at", now).order("created_at");
       if (error) throw error;
       const urls = await signedUrls(data.map((s) => s.logo_url));
-      return data.map((s) => ({ ...s, logo: urls[s.logo_url] })).filter((s) => s.logo);
+      return data.map((s) => ({ ...s, logo: urls[s.logo_url], link: normalizeSponsorLink(s.link_url) })).filter((s) => s.logo);
     },
   });
 }

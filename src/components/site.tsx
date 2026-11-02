@@ -1,7 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import {
-  Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote,
+  Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote, ExternalLink,
 } from "lucide-react";
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
