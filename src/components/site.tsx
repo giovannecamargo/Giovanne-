@@ -49,7 +49,7 @@ export function Header() {
     <header className={`site-header fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${solid ? "border-b border-border bg-background/90 backdrop-blur" : "border-b border-transparent"}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
         <Logo />
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
           {nav.map((n) => <NavLink key={n.to} {...n} />)}
         </nav>
         <div className="flex items-center gap-3">
@@ -251,7 +251,12 @@ export function Partners() {
   return (
     <section className="border-t border-border bg-card/40 py-24">
       <div className="mx-auto max-w-7xl px-5">
-        <h2 className="mb-10 text-3xl font-bold">Parceiros e Patrocinadores</h2>
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+          <h2 className="text-3xl font-bold">Parceiros e Patrocinadores</h2>
+          <Link to="/patrocinadores" className="inline-flex items-center gap-1.5 text-sm text-primary transition-colors hover:text-foreground">
+            Ver todos os patrocinadores <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
         <div className="grid grid-cols-2 gap-px bg-border sm:grid-cols-4">
           {(partners.length ? partners : Array.from({ length: 4 })).map((p: any, i) => {
             const inner = p ? (
@@ -275,6 +280,72 @@ export function Partners() {
             return <div key={i} style={d(3 + Math.min(i, 6))} className={shell}>{inner}</div>;
           })}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function SponsorCard({ p, i }: { p: any; i: number }) {
+  const inner = (
+    <>
+      <img src={p.logo} alt={p.name} className="mx-auto max-h-16 w-auto max-w-full object-contain opacity-85 transition duration-500 group-hover:scale-105 group-hover:opacity-100" />
+      <p className="mt-5 text-sm font-semibold transition duration-300 group-hover:text-primary">{p.name}</p>
+      {p.link ? (
+        <span className="mt-2 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-primary opacity-70 transition duration-300 group-hover:opacity-100">
+          Visitar site <ExternalLink className="h-3 w-3" />
+        </span>
+      ) : (
+        <span className="mt-2 text-[11px] uppercase tracking-widest text-muted-foreground">Parceiro</span>
+      )}
+    </>
+  );
+  const shell = `reveal group relative flex min-h-44 flex-col items-center justify-center overflow-hidden rounded-sm border border-border bg-card/50 p-8 text-center transition duration-500 ${p.link ? "hover:border-primary/60 hover:bg-card" : ""}`;
+  const style = d(4 + Math.min(i, 6));
+  if (p.link) {
+    return (
+      <a href={p.link} target="_blank" rel="noopener noreferrer sponsored" title={`Visitar o site de ${p.name}`} style={style} className={shell}>
+        {inner}
+        <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-primary transition-transform duration-500 group-hover:scale-x-100" />
+      </a>
+    );
+  }
+  return <div style={style} className={shell}>{inner}</div>;
+}
+
+export function SponsorsPage() {
+  const { data: partners = [], isLoading } = useActiveSponsors();
+  return (
+    <section className="mx-auto max-w-7xl px-5 pb-24 pt-32">
+      <SectionTitle eyebrow="Parcerias" title="Patrocinadores e Parceiros" />
+      <p className="reveal max-w-2xl leading-relaxed text-muted-foreground" style={d(3)}>
+        As empresas e marcas que caminham ao lado de Giovanne Camargo. Clique no logo de um parceiro para conhecer o site ou a plataforma dele.
+      </p>
+      {isLoading ? (
+        <p className="reveal mt-14 text-muted-foreground" style={d(4)}>Carregando parceiros…</p>
+      ) : !partners.length ? (
+        <p className="reveal mt-14 text-muted-foreground" style={d(4)}>
+          Nenhum patrocinador ativo no momento. Que tal ser o primeiro? Fale com a gente pelo botão abaixo.
+        </p>
+      ) : (
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {partners.map((p: any, i) => <SponsorCard key={p.id ?? i} p={p} i={i} />)}
+        </div>
+      )}
+      <div className="reveal mt-16 flex flex-col items-start gap-6 rounded-sm border border-dashed border-primary/40 bg-card/40 p-8 sm:flex-row sm:items-center sm:justify-between" style={d(5)}>
+        <div>
+          <h3 className="text-lg font-semibold">Sua marca ao lado de Giovanne Camargo</h3>
+          <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+            Patrocínios e parcerias garantem espaço de mídia em shows, redes sociais e no site oficial. Peça uma proposta sem compromisso.
+          </p>
+        </div>
+        <a
+          href={whatsappLink("Olá! Gostaria de saber sobre patrocínio e parcerias com Giovanne Camargo.")}
+          target="_blank"
+          rel="noreferrer"
+          className={`${btnGold} shrink-0`}
+        >
+          <MessageCircle className="h-4 w-4" /> Quero patrocinar
+        </a>
       </div>
     </section>
   );
