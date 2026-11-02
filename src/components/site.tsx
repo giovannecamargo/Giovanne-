@@ -3,7 +3,8 @@ import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import {
   Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote,
 } from "lucide-react";
-import { events, gallery, nav, partners, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
+import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
+import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
 import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
 export const btnGold = "inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition duration-300 hover:brightness-110";
@@ -199,10 +200,12 @@ export function Testimonials() {
 }
 
 export function Agenda() {
+  const { data: shows, isLoading } = useShows();
+  const events = (shows ?? []).map((e) => ({ ...formatShowDate(e.event_date), name: e.name, city: e.city, time: e.event_time }));
   return (
     <section className="mx-auto max-w-5xl px-5 pb-24 pt-32">
       <SectionTitle eyebrow="Próximos shows" title="Agenda" />
-      <div className="reveal" style={d(3)}><Placeholder>Conteúdo demonstrativo</Placeholder></div>
+      {!isLoading && !events.length && <p className="text-muted-foreground">Nenhum show agendado no momento. Fale com a gente para contratar!</p>}
       <div className="mt-6 space-y-4">
         {events.map((e, i) => (
           <article key={i} style={d(4 + i)} className="reveal grid grid-cols-[auto_minmax(0,1fr)] items-center gap-5 rounded-sm border border-border bg-card/40 p-4 transition-colors duration-300 hover:border-primary/50 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:p-5">
@@ -226,23 +229,25 @@ export function Agenda() {
 }
 
 export function Shows({ onOpen }: { onOpen: (src: string) => void }) {
+  const { data } = usePhotos("shows");
+  const items = [...(data ?? []).map((p) => ({ src: p.src!, alt: p.alt || "Giovanne Camargo no palco" })), ...gallery];
   const spans = ["md:col-span-2 md:row-span-2", "md:row-span-2"];
   return (
     <section className="mx-auto max-w-7xl px-5 pb-24 pt-32">
       <SectionTitle eyebrow="Ao vivo" title="Shows e Apresentações" />
       <div className="grid auto-rows-[220px] grid-cols-2 gap-3 md:grid-cols-3">
-        {gallery.map((g, i) => (
-          <button key={i} onClick={() => onOpen(g.src)} style={d(3 + i)} className={`reveal-img group relative overflow-hidden rounded-sm ${spans[i % spans.length]} col-span-1 row-span-2`}>
+        {items.map((g, i) => (
+          <button key={i} onClick={() => onOpen(g.src)} style={d(3 + Math.min(i, 6))} className={`reveal-img group relative overflow-hidden rounded-sm ${spans[i % spans.length]} col-span-1 row-span-2`}>
             <img src={g.src} alt={g.alt} className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105" />
           </button>
         ))}
       </div>
-      <p className="reveal mt-6 text-sm text-muted-foreground" style={d(5)}>Mais fotos de palco serão adicionadas em breve.</p>
     </section>
   );
 }
 
 export function Partners() {
+  const { data: partners = [] } = useActiveSponsors();
   return (
     <section className="border-t border-border bg-card/40 py-24">
       <div className="mx-auto max-w-7xl px-5">
@@ -250,7 +255,7 @@ export function Partners() {
         <div className="grid grid-cols-2 gap-px bg-border sm:grid-cols-4">
           {(partners.length ? partners : Array.from({ length: 4 })).map((p: any, i) => (
             <div key={i} className="flex h-28 items-center justify-center bg-background p-6">
-              {p ? <img src={p.logo} alt={p.name} className="max-h-12 opacity-80" /> : <span className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground"><Plus className="h-4 w-4" />Seu logo aqui</span>}
+              {p ? <div className="text-center"><img src={p.logo} alt={p.name} className="mx-auto max-h-12" /><p className="mt-2 text-xs text-muted-foreground">{p.name}</p></div> : <span className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground"><Plus className="h-4 w-4" />Seu logo aqui</span>}
             </div>
           ))}
         </div>
@@ -260,6 +265,8 @@ export function Partners() {
 }
 
 export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
+  const { data } = usePhotos("galeria");
+  const items = [...(data ?? []).map((p) => ({ src: p.src!, alt: p.alt || "Foto de Giovanne Camargo" })), ...gallery];
   return (
     <section className="mx-auto max-w-7xl px-5 pb-24 pt-32">
       <SectionTitle eyebrow="Multimídia" title="Galeria" />
@@ -274,8 +281,8 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
         ))}
       </div>
       <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
-        {gallery.map((g, i) => (
-          <button key={i} onClick={() => onOpen(g.src)} style={d(5 + i)} className="reveal-img aspect-square overflow-hidden rounded-sm">
+        {items.map((g, i) => (
+          <button key={i} onClick={() => onOpen(g.src)} style={d(5 + Math.min(i, 6))} className="reveal-img aspect-square overflow-hidden rounded-sm">
             <img src={g.src} alt={g.alt} className="h-full w-full object-cover object-top transition duration-500 hover:scale-105" />
           </button>
         ))}

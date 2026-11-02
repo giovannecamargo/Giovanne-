@@ -19,3 +19,6 @@ Never persist interface state (current page, scroll position, menu, lightbox) to
 `localStorage`, `sessionStorage`, cookies or IndexedDB. Keep it in React state,
 the URL, or the router's per-tab scroll cache, so two open tabs never influence
 each other. Guarded by `src/test/tab-independence.test.ts`.
+
+## Admin content
+Sponsors, agenda shows and page photos live in Lovable Cloud tables; images go in the private `media` bucket and are shown via signed URLs (public buckets are blocked in this workspace). The first account created becomes the only admin; writes are allowed only for the admin role.
