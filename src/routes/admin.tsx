@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Trash2, LogOut, Upload } from "lucide-react";
+import { Trash2, LogOut, Upload, Pencil, Check, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { btnGold, btnOutline } from "@/components/site";
 import { formatShowDate, signedUrls } from "@/lib/content";
+import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import type { Session } from "@supabase/supabase-js";
 
 export const Route = createFileRoute("/admin")({
