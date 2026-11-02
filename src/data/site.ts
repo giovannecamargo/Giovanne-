@@ -43,6 +43,7 @@ export const nav = [
   { to: "/agenda", label: "Agenda" },
   { to: "/shows", label: "Shows" },
   { to: "/galeria", label: "Galeria" },
+  { to: "/patrocinadores", label: "Patrocinadores" },
   { to: "/contato", label: "Contato" },
 ] as const;
 
