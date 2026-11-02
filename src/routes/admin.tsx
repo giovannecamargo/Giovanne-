@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Trash2, LogOut, Upload } from "lucide-react";
+import { Trash2, LogOut, Upload, Pencil, Check, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { btnGold, btnOutline } from "@/components/site";
 import { formatShowDate, signedUrls } from "@/lib/content";
+import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import type { Session } from "@supabase/supabase-js";
 
 export const Route = createFileRoute("/admin")({
@@ -146,31 +147,44 @@ function Sponsors() {
       const { data, error } = await supabase.from("sponsors").select("*").order("ends_at", { ascending: false });
       if (error) throw error;
       const urls = await signedUrls(data.map((s) => s.logo_url));
-      return data.map((s) => ({ ...s, logo: urls[s.logo_url] }));
+      return data.map((s) => ({ ...s, logo: urls[s.logo_url], link: normalizeSponsorLink(s.link_url) }));
     },
   });
   const [name, setName] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [link, setLink] = useState("");
   const [start, setStart] = useState(today());
   const [end, setEnd] = useState(plusDays(30));
   const [msg, setMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editLink, setEditLink] = useState("");
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-sponsors"] }); qc.invalidateQueries({ queryKey: ["sponsors"] }); };
 
   async function add(e: FormEvent) {
     e.preventDefault(); if (!file) return; setBusy(true); setMsg(null);
     try {
       if (end <= start) throw new Error("A data final precisa ser depois da inicial.");
+      const url = normalizeSponsorLink(link);
+      if (link.trim() && !url) throw new Error("Link inválido. Use algo como https://www.exemplo.com.br");
       const path = await uploadFile(file, "sponsors");
       const { error } = await supabase.from("sponsors").insert({
-        name, logo_url: path,
+        name, logo_url: path, link_url: url,
         starts_at: new Date(`${start}T00:00:00`).toISOString(),
         ends_at: new Date(`${end}T23:59:59`).toISOString(),
       });
       if (error) throw error;
-      setName(""); setFile(null); (e.target as HTMLFormElement).reset(); refresh(); setMsg("Patrocinador adicionado.");
+      setName(""); setFile(null); setLink(""); (e.target as HTMLFormElement).reset(); refresh(); setMsg("Patrocinador adicionado.");
     } catch (err: any) { setMsg(err.message ?? "Erro ao salvar."); }
     setBusy(false);
+  }
+
+  async function saveLink(id: string) {
+    const url = normalizeSponsorLink(editLink);
+    if (editLink.trim() && !url) return setMsg("Link inválido. Use algo como https://www.exemplo.com.br");
+    const { error } = await supabase.from("sponsors").update({ link_url: url }).eq("id", id);
+    if (error) return setMsg("Não foi possível salvar o link.");
+    setEditId(null); refresh(); setMsg(url ? "Link atualizado." : "Link removido — o logo volta a não ser clicável.");
   }
 
   async function remove(id: string, path: string) {
@@ -187,6 +201,11 @@ function Sponsors() {
         <form onSubmit={add} className="grid gap-4 sm:grid-cols-2">
           <label className="text-sm sm:col-span-2">Nome<input className={`${input} mt-1`} value={name} onChange={(e) => setName(e.target.value)} required /></label>
           <label className="text-sm sm:col-span-2">Logo<input className={`${input} mt-1`} type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} required /></label>
+          <label className="text-sm sm:col-span-2">
+            Site do patrocinador (opcional)
+            <input className={`${input} mt-1`} type="text" inputMode="url" placeholder="https://www.instagram.com/patrocinador" value={link} onChange={(e) => setLink(e.target.value)} />
+            <span className="mt-1 block text-xs text-muted-foreground">Quem clicar no logo abre esse site. Deixe em branco para o logo não ser clicável.</span>
+          </label>
           <label className="text-sm">Ativo a partir de<input className={`${input} mt-1`} type="date" value={start} onChange={(e) => setStart(e.target.value)} required /></label>
           <label className="text-sm">Ativo até<input className={`${input} mt-1`} type="date" value={end} onChange={(e) => setEnd(e.target.value)} required /></label>
           {msg && <p className="text-sm text-primary sm:col-span-2">{msg}</p>}
@@ -199,8 +218,9 @@ function Sponsors() {
           {data.map((s) => {
             const active = now >= +new Date(s.starts_at) && now < +new Date(s.ends_at);
             const future = now < +new Date(s.starts_at);
+            const editing = editId === s.id;
             return (
-              <li key={s.id} className="flex items-center gap-4 py-3">
+              <li key={s.id} className="flex flex-wrap items-center gap-4 py-3">
                 <div className="flex h-12 w-20 items-center justify-center bg-background">{s.logo && <img src={s.logo} alt={s.name} className="max-h-10 max-w-full" />}</div>
                 <div className="min-w-0 flex-1">
                   <div className="font-medium">{s.name}</div>
@@ -208,6 +228,20 @@ function Sponsors() {
                     {new Date(s.starts_at).toLocaleDateString("pt-BR")} até {new Date(s.ends_at).toLocaleDateString("pt-BR")} ·{" "}
                     <span className={active ? "text-primary" : ""}>{active ? "No site" : future ? "Agendado" : "Expirado (fora do site)"}</span>
                   </div>
+                  {editing ? (
+                    <div className="mt-2 flex max-w-md items-center gap-2">
+                      <input className={input} placeholder="https://www.exemplo.com.br" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
+                      <button onClick={() => saveLink(s.id)} aria-label="Salvar link" className="text-primary hover:brightness-110"><Check className="h-4 w-4" /></button>
+                      <button onClick={() => setEditId(null)} aria-label="Cancelar edição do link" className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
+                    </div>
+                  ) : (
+                    <div className="mt-1 flex items-center gap-2">
+                      {s.link
+                        ? <a href={s.link} target="_blank" rel="noopener noreferrer" className="truncate text-xs text-primary hover:underline">{s.link}</a>
+                        : <span className="text-xs text-muted-foreground">Sem site — logo não clicável</span>}
+                      <button onClick={() => { setEditId(s.id); setEditLink(s.link ?? ""); }} aria-label="Editar site do patrocinador" className="text-muted-foreground hover:text-primary"><Pencil className="h-3.5 w-3.5" /></button>
+                    </div>
+                  )}
                 </div>
                 <button onClick={() => remove(s.id, s.logo_url)} aria-label="Remover" className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
               </li>

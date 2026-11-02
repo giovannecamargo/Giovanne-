@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { normalizeSponsorLink } from "@/lib/sponsor-link";
 
 const MONTHS = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
 
@@ -40,6 +41,7 @@ export function usePhotos(section: "shows" | "galeria") {
   });
 }
 
+
 export function useActiveSponsors() {
   return useQuery({
     queryKey: ["sponsors", "active"],
@@ -48,7 +50,7 @@ export function useActiveSponsors() {
       const { data, error } = await supabase.from("sponsors").select("*").lte("starts_at", now).gt("ends_at", now).order("created_at");
       if (error) throw error;
       const urls = await signedUrls(data.map((s) => s.logo_url));
-      return data.map((s) => ({ ...s, logo: urls[s.logo_url] })).filter((s) => s.logo);
+      return data.map((s) => ({ ...s, logo: urls[s.logo_url], link: normalizeSponsorLink(s.link_url) })).filter((s) => s.logo);
     },
   });
 }

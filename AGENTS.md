@@ -22,3 +22,4 @@ each other. Guarded by `src/test/tab-independence.test.ts`.
 
 ## Admin content
 Sponsors, agenda shows and page photos live in Lovable Cloud tables; images go in the private `media` bucket and are shown via signed URLs (public buckets are blocked in this workspace). The first account created becomes the only admin; writes are allowed only for the admin role.
+A sponsor may carry an optional destination address: when it has one, its logo on the public site opens that address in a new tab; when it has none, the logo stays non-clickable. Typed addresses are sanitized to plain http(s) by `normalizeSponsorLink` (`src/lib/sponsor-link.ts`) so a logo can never open a script — guarded by `src/test/sponsor-link.test.ts`.

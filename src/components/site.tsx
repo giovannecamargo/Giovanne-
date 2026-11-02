@@ -1,7 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import {
-  Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote,
+  Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote, ExternalLink,
 } from "lucide-react";
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
@@ -253,11 +253,27 @@ export function Partners() {
       <div className="mx-auto max-w-7xl px-5">
         <h2 className="mb-10 text-3xl font-bold">Parceiros e Patrocinadores</h2>
         <div className="grid grid-cols-2 gap-px bg-border sm:grid-cols-4">
-          {(partners.length ? partners : Array.from({ length: 4 })).map((p: any, i) => (
-            <div key={i} className="flex h-28 items-center justify-center bg-background p-6">
-              {p ? <div className="text-center"><img src={p.logo} alt={p.name} className="mx-auto max-h-12" /><p className="mt-2 text-xs text-muted-foreground">{p.name}</p></div> : <span className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground"><Plus className="h-4 w-4" />Seu logo aqui</span>}
-            </div>
-          ))}
+          {(partners.length ? partners : Array.from({ length: 4 })).map((p: any, i) => {
+            const inner = p ? (
+              <div className="text-center">
+                <img src={p.logo} alt={p.name} className="mx-auto max-h-12 opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100" />
+                <p className="mt-2 text-xs text-muted-foreground transition duration-300 group-hover:text-primary">{p.name}</p>
+              </div>
+            ) : (
+              <span className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground"><Plus className="h-4 w-4" />Seu logo aqui</span>
+            );
+            const shell = `reveal group relative flex h-28 items-center justify-center overflow-hidden bg-background p-6 transition duration-500 ${p?.link ? "hover:bg-card/60" : ""}`;
+            if (p?.link) {
+              return (
+                <a key={i} href={p.link} target="_blank" rel="noopener noreferrer sponsored" title={`Visitar o site de ${p.name}`} style={d(3 + Math.min(i, 6))} className={shell}>
+                  {inner}
+                  <ExternalLink className="absolute right-3 top-3 h-3.5 w-3.5 text-primary opacity-0 transition duration-300 group-hover:opacity-100" />
+                  <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-primary transition-transform duration-500 group-hover:scale-x-100" />
+                </a>
+              );
+            }
+            return <div key={i} style={d(3 + Math.min(i, 6))} className={shell}>{inner}</div>;
+          })}
         </div>
       </div>
     </section>
