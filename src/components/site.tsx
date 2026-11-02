@@ -299,7 +299,7 @@ function SponsorCard({ p, i }: { p: any; i: number }) {
       )}
     </>
   );
-  const shell = `reveal group relative flex min-h-44 flex-col items-center justify-center overflow-hidden rounded-sm border border-border bg-card/50 p-8 text-center transition duration-500 ${p.link ? "hover:border-primary/60 hover:bg-card" : ""}`;
+  const shell = `reveal group relative flex min-h-44 w-full flex-col items-center justify-center overflow-hidden rounded-sm border border-border bg-card/50 p-8 text-center transition duration-500 sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)] ${p.link ? "hover:border-primary/60 hover:bg-card" : ""}`;
   const style = d(4 + Math.min(i, 6));
   if (p.link) {
     return (
@@ -327,7 +327,7 @@ export function SponsorsPage() {
           Nenhum patrocinador ativo no momento. Que tal ser o primeiro? Fale com a gente pelo botão abaixo.
         </p>
       ) : (
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 flex flex-wrap justify-center gap-4">
           {partners.map((p: any, i) => <SponsorCard key={p.id ?? i} p={p} i={i} />)}
         </div>
       )}
