@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as PatrocinadoresRouteImport } from './routes/patrocinadores'
 import { Route as ShowsRouteImport } from './routes/shows'
 import { Route as SobreRouteImport } from './routes/sobre'
 
@@ -42,6 +43,11 @@ const GaleriaRoute = GaleriaRouteImport.update({
   path: '/galeria',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PatrocinadoresRoute = PatrocinadoresRouteImport.update({
+  id: '/patrocinadores',
+  path: '/patrocinadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShowsRoute = ShowsRouteImport.update({
   id: '/shows',
   path: '/shows',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/agenda': typeof AgendaRoute
   '/contato': typeof ContatoRoute
   '/galeria': typeof GaleriaRoute
+  '/patrocinadores': typeof PatrocinadoresRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/agenda': typeof AgendaRoute
   '/contato': typeof ContatoRoute
   '/galeria': typeof GaleriaRoute
+  '/patrocinadores': typeof PatrocinadoresRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
 }
@@ -78,15 +86,31 @@ export interface FileRoutesById {
   '/agenda': typeof AgendaRoute
   '/contato': typeof ContatoRoute
   '/galeria': typeof GaleriaRoute
+  '/patrocinadores': typeof PatrocinadoresRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/admin' | '/agenda' | '/contato' | '/galeria' | '/shows' | '/sobre'
+    | '/'
+    | '/admin'
+    | '/agenda'
+    | '/contato'
+    | '/galeria'
+    | '/patrocinadores'
+    | '/shows'
+    | '/sobre'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/agenda' | '/contato' | '/galeria' | '/shows' | '/sobre'
+  to:
+    | '/'
+    | '/admin'
+    | '/agenda'
+    | '/contato'
+    | '/galeria'
+    | '/patrocinadores'
+    | '/shows'
+    | '/sobre'
   id:
     | '__root__'
     | '/'
@@ -94,6 +118,7 @@ export interface FileRouteTypes {
     | '/agenda'
     | '/contato'
     | '/galeria'
+    | '/patrocinadores'
     | '/shows'
     | '/sobre'
   fileRoutesById: FileRoutesById
@@ -104,6 +129,7 @@ export interface RootRouteChildren {
   AgendaRoute: typeof AgendaRoute
   ContatoRoute: typeof ContatoRoute
   GaleriaRoute: typeof GaleriaRoute
+  PatrocinadoresRoute: typeof PatrocinadoresRoute
   ShowsRoute: typeof ShowsRoute
   SobreRoute: typeof SobreRoute
 }
@@ -145,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GaleriaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/patrocinadores': {
+      id: '/patrocinadores'
+      path: '/patrocinadores'
+      fullPath: '/patrocinadores'
+      preLoaderRoute: typeof PatrocinadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shows': {
       id: '/shows'
       path: '/shows'
@@ -168,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgendaRoute: AgendaRoute,
   ContatoRoute: ContatoRoute,
   GaleriaRoute: GaleriaRoute,
+  PatrocinadoresRoute: PatrocinadoresRoute,
   ShowsRoute: ShowsRoute,
   SobreRoute: SobreRoute,
 }
