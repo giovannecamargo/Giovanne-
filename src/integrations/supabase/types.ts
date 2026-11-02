@@ -70,6 +70,7 @@ export type Database = {
           created_at: string
           ends_at: string
           id: string
+          link_url: string | null
           logo_url: string
           name: string
           starts_at: string
@@ -78,6 +79,7 @@ export type Database = {
           created_at?: string
           ends_at: string
           id?: string
+          link_url?: string | null
           logo_url: string
           name: string
           starts_at?: string
@@ -86,6 +88,7 @@ export type Database = {
           created_at?: string
           ends_at?: string
           id?: string
+          link_url?: string | null
           logo_url?: string
           name?: string
           starts_at?: string

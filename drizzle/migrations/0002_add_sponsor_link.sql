@@ -1,0 +1,2 @@
+alter table public.sponsors add column link_url text;
+comment on column public.sponsors.link_url is 'Optional destination opened when a visitor clicks the sponsor logo; empty means the logo is not clickable.';
