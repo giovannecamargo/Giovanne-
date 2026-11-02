@@ -252,6 +252,17 @@ function Sponsors() {
     </div>
   );
 }
+
+function AgendaAdmin() {
+  const qc = useQueryClient();
+  const { data = [] } = useQuery({
+    queryKey: ["admin-shows"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("shows").select("*").order("event_date");
+      if (error) throw error;
+      return data;
+    },
+  });
   const empty = { id: "", name: "", city: "", event_date: today(), event_time: "" };
   const [form, setForm] = useState(empty);
   const [msg, setMsg] = useState<string | null>(null);
