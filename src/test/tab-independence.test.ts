@@ -14,6 +14,8 @@ function sourceFiles(dir: string): string[] {
     const full = join(dir, entry);
     if (statSync(full).isDirectory()) {
       if (full.endsWith(join("src", "components", "ui"))) return [];
+      // Generated sign-in session storage: a login, not interface state.
+      if (full.endsWith(join("src", "integrations"))) return [];
       return sourceFiles(full);
     }
     if (!/\.(ts|tsx)$/.test(entry)) return [];
