@@ -288,20 +288,16 @@ export function Partners() {
 }
 
 function SponsorCard({ p, i }: { p: any; i: number }) {
-  const [ratio, setRatio] = useState(4 / 3);
+  const bg = useLogoBg(p.logo);
   const panel = (
-    <div className="relative w-full overflow-hidden bg-panel ring-1 ring-border" style={{ aspectRatio: String(ratio) }}>
+    <div
+      className="relative flex h-48 items-center justify-center overflow-hidden bg-panel p-5 ring-1 ring-border"
+      style={bg ? { backgroundColor: bg } : undefined}
+    >
       <img
         src={p.logo}
         alt={`Logo de ${p.name}`}
-        onLoad={(e) => {
-          const el = e.currentTarget;
-          if (el.naturalWidth > 0 && el.naturalHeight > 0) {
-            const r = el.naturalWidth / el.naturalHeight;
-            setRatio(Math.min(3, Math.max(0.6, r)));
-          }
-        }}
-        className="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-105"
+        className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
       />
 
       <span className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-500 group-hover:scale-x-100" />
