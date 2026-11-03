@@ -169,7 +169,7 @@ export function Highlights() {
 export function About() {
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-24 pt-32 md:grid-cols-2">
-      <img src={photos.pb} alt="Giovanne Camargo em apresentação" className="reveal-img aspect-[4/5] w-full rounded-sm object-cover object-top" />
+      <img src={photos.pb} alt="Giovanne Camargo em apresentação" loading="lazy" decoding="async" className="reveal-img aspect-[4/5] w-full rounded-sm object-cover object-top" />
       <div>
         <SectionTitle eyebrow="Biografia" title="Sobre o Artista" />
         <div className="reveal" style={d(3)}><Placeholder>Aguardando texto oficial</Placeholder></div>
@@ -256,7 +256,7 @@ export function Shows({ onOpen }: { onOpen: (src: string) => void }) {
       <div className="grid auto-rows-[220px] grid-cols-2 gap-3 md:grid-cols-3">
         {items.map((g, i) => (
           <button key={i} onClick={() => onOpen(g.src)} style={d(3 + Math.min(i, 6))} className={`reveal-img group relative overflow-hidden rounded-sm ${spans[i % spans.length]} col-span-1 row-span-2`}>
-            <img src={g.src} alt={g.alt} className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105" />
+            <img src={g.src} alt={g.alt} loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105" />
           </button>
         ))}
       </div>
@@ -279,7 +279,7 @@ export function Partners() {
           {(partners.length ? partners : Array.from({ length: 4 })).map((p: any, i) => {
             const inner = p ? (
               <div className="text-center">
-                <img src={p.logo} alt={p.name} className="mx-auto max-h-16 w-auto max-w-full object-contain opacity-85 transition duration-500 group-hover:scale-105 group-hover:opacity-100" />
+                <img src={p.logo} alt={p.name} loading="lazy" decoding="async" className="mx-auto max-h-16 w-auto max-w-full object-contain opacity-85 transition duration-500 group-hover:scale-105 group-hover:opacity-100" />
                 <p className="mt-2 text-xs text-muted-foreground transition duration-300 group-hover:text-primary">{p.name}</p>
               </div>
             ) : (
@@ -314,6 +314,8 @@ function SponsorCard({ p, i }: { p: any; i: number }) {
       <img
         src={p.logo}
         alt={`Logo de ${p.name}`}
+        loading="lazy"
+        decoding="async"
         className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
       />
 
@@ -406,7 +408,7 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
       <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
         {items.map((g, i) => (
           <button key={i} onClick={() => onOpen(g.src)} style={d(5 + Math.min(i, 6))} className="reveal-img aspect-square overflow-hidden rounded-sm">
-            <img src={g.src} alt={g.alt} className="h-full w-full object-cover object-top transition duration-500 hover:scale-105" />
+            <img src={g.src} alt={g.alt} loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition duration-500 hover:scale-105" />
           </button>
         ))}
       </div>
