@@ -118,6 +118,9 @@ export function Hero() {
       <div className="absolute inset-0 bg-glow-warm" />
       <img
         src={photos.palco}
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
         alt="Giovanne Camargo cantando ao vivo com violão"
         className="reveal-img absolute inset-y-0 right-0 h-full w-full object-cover object-top opacity-70 md:w-[65%] md:opacity-100 md:[mask-image:linear-gradient(to_right,transparent,black_35%)]"
       />
