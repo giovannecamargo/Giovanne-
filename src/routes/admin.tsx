@@ -264,14 +264,17 @@ function AgendaAdmin() {
       return data;
     },
   });
-  const empty = { id: "", name: "", city: "", event_date: today(), event_time: "", visibility: "public" as ShowAccess };
+  const empty = { id: "", name: "", city: "", event_date: today(), event_time: "", visibility: "public" as ShowAccess, details: "", ticket_url: "" };
   const [form, setForm] = useState(empty);
   const [msg, setMsg] = useState<string | null>(null);
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-shows"] }); qc.invalidateQueries({ queryKey: ["shows"] }); };
 
   async function save(e: FormEvent) {
     e.preventDefault(); setMsg(null);
-    const { id, ...row } = form;
+    const { id, ...rest } = form;
+    const ticket = rest.ticket_url.trim() ? normalizeSponsorLink(rest.ticket_url) : null;
+    if (rest.ticket_url.trim() && !ticket) return setMsg("Link do ingresso inválido.");
+    const row = { ...rest, details: rest.details.trim(), ticket_url: ticket };
     const { error } = id ? await supabase.from("shows").update(row).eq("id", id) : await supabase.from("shows").insert(row);
     if (error) return setMsg(error.message);
     setForm(empty); refresh(); setMsg(id ? "Show atualizado." : "Show adicionado.");
@@ -308,6 +311,8 @@ function AgendaAdmin() {
               “Aberto ao público” aparece na agenda com a etiqueta dourada. “Privado” marca o evento como fechado (particular ou corporativo).
             </p>
           </div>
+          <label className="text-sm sm:col-span-2">Informações sobre o show<textarea className={`${input} mt-1 min-h-24`} value={form.details} onChange={(e) => setForm({ ...form, details: e.target.value })} placeholder="Local, abertura dos portões, classificação, atrações…" /></label>
+          <label className="text-sm sm:col-span-2">Link para compra de ingresso (opcional)<input className={`${input} mt-1`} value={form.ticket_url} onChange={(e) => setForm({ ...form, ticket_url: e.target.value })} placeholder="ex.: sympla.com.br/meu-evento" /></label>
           {msg && <p className="text-sm text-primary sm:col-span-2">{msg}</p>}
           <div className="flex gap-3 sm:col-span-2">
             <button className={`${btnGold} flex-1`}>{form.id ? "Salvar alterações" : "Adicionar"}</button>
@@ -333,7 +338,7 @@ function AgendaAdmin() {
                     </span>
                   </div>
                 </div>
-                <button onClick={() => setForm({ id: s.id, name: s.name, city: s.city, event_date: s.event_date, event_time: s.event_time, visibility: normalizeShowAccess(s.visibility) })} className="text-sm text-primary hover:underline">Editar</button>
+                <button onClick={() => setForm({ id: s.id, name: s.name, city: s.city, event_date: s.event_date, event_time: s.event_time, visibility: normalizeShowAccess(s.visibility), details: s.details ?? "", ticket_url: s.ticket_url ?? "" })} className="text-sm text-primary hover:underline">Editar</button>
                 <button onClick={() => remove(s.id)} aria-label="Remover" className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
               </li>
             );
