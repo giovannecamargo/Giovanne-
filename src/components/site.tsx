@@ -289,7 +289,7 @@ export function Partners() {
 function SponsorCard({ p, i }: { p: any; i: number }) {
   const [ratio, setRatio] = useState(4 / 3);
   const panel = (
-    <div className="relative w-full overflow-hidden bg-panel" style={{ aspectRatio: String(ratio) }}>
+    <div className="relative w-full overflow-hidden bg-panel ring-1 ring-border" style={{ aspectRatio: String(ratio) }}>
       <img
         src={p.logo}
         alt={`Logo de ${p.name}`}
