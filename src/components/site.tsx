@@ -299,16 +299,18 @@ function SponsorCard({ p, i }: { p: any; i: number }) {
   const inner = (
     <>
       {panel}
-      <p className="mt-4 text-center text-sm font-semibold leading-snug transition duration-300 group-hover:text-primary">
+      <p className="mt-4 min-h-10 text-center text-sm font-semibold leading-snug transition duration-300 group-hover:text-primary">
         {p.name}
       </p>
-      {p.link ? (
-        <span className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-muted-foreground transition duration-300 group-hover:text-primary">
-          Visitar site <ExternalLink className="h-3 w-3" />
-        </span>
-      ) : null}
+      <span
+        aria-hidden={p.link ? undefined : "true"}
+        className={`mt-1.5 flex h-4 items-center justify-center gap-1.5 text-[10px] uppercase tracking-widest ${p.link ? "text-muted-foreground transition duration-300 group-hover:text-primary" : ""}`}
+      >
+        {p.link ? <>Visitar site <ExternalLink className="h-3 w-3" /></> : null}
+      </span>
     </>
   );
+
   const shell = "reveal group block w-full text-center";
   const style = d(4 + Math.min(i, 6));
   if (p.link) {
