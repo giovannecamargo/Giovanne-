@@ -309,7 +309,7 @@ function SponsorCard({ p, i }: { p: any; i: number }) {
       ) : null}
     </>
   );
-  const shell = "reveal group block w-full";
+  const shell = "reveal group block w-full text-center";
   const style = d(4 + Math.min(i, 6));
   if (p.link) {
     return (
