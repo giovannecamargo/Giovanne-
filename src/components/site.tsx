@@ -6,6 +6,7 @@ import {
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
 import { normalizeShowAccess, showAccessLabel } from "@/lib/show-access";
+import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import { useLogoBg } from "@/lib/logo-bg";
 import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
