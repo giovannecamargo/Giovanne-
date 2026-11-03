@@ -42,28 +42,34 @@ export type Database = {
         Row: {
           city: string
           created_at: string
+          details: string
           event_date: string
           event_time: string
           id: string
           name: string
+          ticket_url: string | null
           visibility: string
         }
         Insert: {
           city?: string
           created_at?: string
+          details?: string
           event_date: string
           event_time?: string
           id?: string
           name: string
+          ticket_url?: string | null
           visibility?: string
         }
         Update: {
           city?: string
           created_at?: string
+          details?: string
           event_date?: string
           event_time?: string
           id?: string
           name?: string
+          ticket_url?: string | null
           visibility?: string
         }
         Relationships: []
