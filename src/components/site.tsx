@@ -337,7 +337,7 @@ export function SponsorsPage() {
           Nenhum patrocinador ativo no momento. Que tal ser o primeiro? Fale com a gente pelo botão abaixo.
         </p>
       ) : (
-        <div className="mt-14 flex flex-wrap justify-center gap-4">
+        <div className="mt-14 grid grid-cols-2 items-start gap-x-8 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
           {partners.map((p: any, i) => <SponsorCard key={p.id ?? i} p={p} i={i} />)}
         </div>
       )}
