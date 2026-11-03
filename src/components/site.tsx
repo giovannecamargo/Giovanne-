@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
+import { useLogoBg } from "@/lib/logo-bg";
 import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
 export const btnGold = "inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition duration-300 hover:brightness-110";
@@ -287,8 +288,12 @@ export function Partners() {
 }
 
 function SponsorCard({ p, i }: { p: any; i: number }) {
+  const bg = useLogoBg(p.logo);
   const panel = (
-    <div className="relative flex h-48 items-center justify-center overflow-hidden bg-white p-5">
+    <div
+      className="relative flex h-48 items-center justify-center overflow-hidden bg-panel p-5 ring-1 ring-border"
+      style={bg ? { backgroundColor: bg } : undefined}
+    >
       <img
         src={p.logo}
         alt={`Logo de ${p.name}`}
