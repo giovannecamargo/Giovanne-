@@ -203,7 +203,8 @@ export function Testimonials() {
 
 export function Agenda() {
   const { data: shows, isLoading } = useShows();
-  const events = (shows ?? []).map((e) => ({ ...formatShowDate(e.event_date), name: e.name, city: e.city, time: e.event_time, access: normalizeShowAccess(e.visibility) }));
+  const [open, setOpen] = useState<number | null>(null);
+  const events = (shows ?? []).map((e) => ({ ...formatShowDate(e.event_date), name: e.name, city: e.city, time: e.event_time, access: normalizeShowAccess(e.visibility), details: (e.details ?? "").trim(), ticket: normalizeSponsorLink(e.ticket_url) }));
   return (
     <section className="mx-auto max-w-5xl px-5 pb-24 pt-32">
       <SectionTitle eyebrow="Próximos shows" title="Agenda" />
@@ -226,7 +227,17 @@ export function Agenda() {
                 </span>
               </div>
             </div>
-            <a href={whatsappLink()} target="_blank" rel="noreferrer" className="col-span-2 text-sm text-primary hover:underline sm:col-span-1">Informações</a>
+            <div className="col-span-2 flex flex-wrap items-center gap-4 sm:col-span-1 sm:justify-end">
+              {e.ticket && <a href={e.ticket} target="_blank" rel="noopener noreferrer" className={`${btnGold} px-4 py-2 text-xs`}>Comprar ingresso</a>}
+              <button type="button" aria-expanded={open === i} onClick={() => setOpen(open === i ? null : i)} className="text-sm text-primary hover:underline">
+                {open === i ? "Fechar" : "Informações"}
+              </button>
+            </div>
+            {open === i && (
+              <div className="col-span-full border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+                {e.details || "Mais informações sobre este show em breve."}
+              </div>
+            )}
           </article>
         ))}
       </div>
