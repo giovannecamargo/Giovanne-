@@ -15,6 +15,31 @@ function median(nums: number[]) {
   return s[Math.floor(s.length / 2)];
 }
 
+/**
+ * Cor dominante da borda de um bitmap. A borda é exatamente o que sobra ao lado
+ * do logo quando ele não preenche o painel, então são essas faixas que ela deve
+ * pintar. Mediana, e não média: um selo claro encostado na borda não desloca a cor.
+ */
+export function edgeColor(d: Uint8ClampedArray | number[], S: number): string {
+  const r: number[] = [];
+  const g: number[] = [];
+  const b: number[] = [];
+  const push = (i: number) => {
+    r.push(d[i]);
+    g.push(d[i + 1]);
+    b.push(d[i + 2]);
+  };
+  for (let x = 0; x < S; x++) {
+    push(x * 4);
+    push(((S - 1) * S + x) * 4);
+  }
+  for (let y = 0; y < S; y++) {
+    push(y * S * 4);
+    push((y * S + S - 1) * 4);
+  }
+  return `rgb(${median(r)}, ${median(g)}, ${median(b)})`;
+}
+
 async function sample(src: string): Promise<string> {
   const img = new Image();
   img.crossOrigin = "anonymous";
@@ -36,24 +61,7 @@ async function sample(src: string): Promise<string> {
   ctx.fillRect(0, 0, S, S);
   ctx.drawImage(img, 0, 0, S, S);
 
-  const d = ctx.getImageData(0, 0, S, S).data;
-  const r: number[] = [];
-  const g: number[] = [];
-  const b: number[] = [];
-  const push = (i: number) => {
-    r.push(d[i]);
-    g.push(d[i + 1]);
-    b.push(d[i + 2]);
-  };
-  for (let x = 0; x < S; x++) {
-    push(x * 4);
-    push(((S - 1) * S + x) * 4);
-  }
-  for (let y = 0; y < S; y++) {
-    push(y * S * 4);
-    push((y * S + S - 1) * 4);
-  }
-  return `rgb(${median(r)}, ${median(g)}, ${median(b)})`;
+  return edgeColor(ctx.getImageData(0, 0, S, S).data, S);
 }
 
 export async function readLogoBg(src: string): Promise<string> {
