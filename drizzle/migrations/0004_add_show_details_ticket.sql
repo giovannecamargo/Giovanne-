@@ -1,0 +1,1 @@
+ALTER TABLE public.shows ADD COLUMN IF NOT EXISTS details text NOT NULL DEFAULT ''; ALTER TABLE public.shows ADD COLUMN IF NOT EXISTS ticket_url text;
