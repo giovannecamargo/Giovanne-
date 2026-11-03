@@ -12,7 +12,7 @@ function fallback() {
 function median(nums: number[]) {
   if (!nums.length) return 0;
   const s = [...nums].sort((a, b) => a - b);
-  return s[Math.floor(s.length / 2)];
+  return s[Math.floor(s.length / 2)] ?? 0;
 }
 
 /**
@@ -25,9 +25,9 @@ export function edgeColor(d: Uint8ClampedArray | number[], S: number): string {
   const g: number[] = [];
   const b: number[] = [];
   const push = (i: number) => {
-    r.push(d[i]);
-    g.push(d[i + 1]);
-    b.push(d[i + 2]);
+    r.push(d[i] ?? 0);
+    g.push(d[i + 1] ?? 0);
+    b.push(d[i + 2] ?? 0);
   };
   for (let x = 0; x < S; x++) {
     push(x * 4);
