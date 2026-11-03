@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
+import { useLogoBg } from "@/lib/logo-bg";
 import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
 export const btnGold = "inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition duration-300 hover:brightness-110";
