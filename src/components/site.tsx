@@ -286,31 +286,41 @@ export function Partners() {
 }
 
 function SponsorCard({ p, i }: { p: any; i: number }) {
+  const panel = (
+    <div className="relative flex h-32 items-center justify-center overflow-hidden bg-white px-7 py-7">
+      <img
+        src={p.logo}
+        alt={`Logo de ${p.name}`}
+        className="max-h-16 w-auto max-w-full object-contain transition duration-500 group-hover:scale-105"
+      />
+      <span className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-500 group-hover:scale-x-100" />
+    </div>
+  );
   const inner = (
     <>
-      <img src={p.logo} alt={p.name} className="mx-auto max-h-16 w-auto max-w-full object-contain opacity-85 transition duration-500 group-hover:scale-105 group-hover:opacity-100" />
-      <p className="mt-5 text-sm font-semibold transition duration-300 group-hover:text-primary">{p.name}</p>
+      {panel}
+      <p className="mt-4 text-center text-sm font-semibold leading-snug transition duration-300 group-hover:text-primary">
+        {p.name}
+      </p>
       {p.link ? (
-        <span className="mt-2 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-primary opacity-70 transition duration-300 group-hover:opacity-100">
+        <span className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-muted-foreground transition duration-300 group-hover:text-primary">
           Visitar site <ExternalLink className="h-3 w-3" />
         </span>
-      ) : (
-        <span className="mt-2 text-[11px] uppercase tracking-widest text-muted-foreground">Parceiro</span>
-      )}
+      ) : null}
     </>
   );
-  const shell = `reveal group relative flex min-h-44 w-full flex-col items-center justify-center overflow-hidden rounded-sm border border-border bg-card/50 p-8 text-center transition duration-500 sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)] ${p.link ? "hover:border-primary/60 hover:bg-card" : ""}`;
+  const shell = "reveal group block w-full";
   const style = d(4 + Math.min(i, 6));
   if (p.link) {
     return (
       <a href={p.link} target="_blank" rel="noopener noreferrer sponsored" title={`Visitar o site de ${p.name}`} style={style} className={shell}>
         {inner}
-        <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-primary transition-transform duration-500 group-hover:scale-x-100" />
       </a>
     );
   }
   return <div style={style} className={shell}>{inner}</div>;
 }
+
 
 export function SponsorsPage() {
   const { data: partners = [], isLoading } = useActiveSponsors();
