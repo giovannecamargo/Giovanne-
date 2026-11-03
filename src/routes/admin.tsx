@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { btnGold, btnOutline } from "@/components/site";
 import { formatShowDate, signedUrls } from "@/lib/content";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
+import { normalizeShowAccess, showAccessShortLabel, type ShowAccess } from "@/lib/show-access";
 import type { Session } from "@supabase/supabase-js";
 
 export const Route = createFileRoute("/admin")({
@@ -263,7 +264,7 @@ function AgendaAdmin() {
       return data;
     },
   });
-  const empty = { id: "", name: "", city: "", event_date: today(), event_time: "" };
+  const empty = { id: "", name: "", city: "", event_date: today(), event_time: "", visibility: "public" as ShowAccess };
   const [form, setForm] = useState(empty);
   const [msg, setMsg] = useState<string | null>(null);
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-shows"] }); qc.invalidateQueries({ queryKey: ["shows"] }); };
@@ -288,6 +289,25 @@ function AgendaAdmin() {
           <label className="text-sm sm:col-span-2">Cidade — UF<input className={`${input} mt-1`} value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} required /></label>
           <label className="text-sm">Data<input className={`${input} mt-1`} type="date" value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} required /></label>
           <label className="text-sm">Horário<input className={`${input} mt-1`} type="time" value={form.event_time} onChange={(e) => setForm({ ...form, event_time: e.target.value })} required /></label>
+          <div className="text-sm sm:col-span-2">
+            <span className="text-muted-foreground">Acesso do show</span>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {([["public", "Aberto ao público"], ["private", "Privado"]] as const).map(([value, label]) => (
+                <button
+                  type="button"
+                  key={value}
+                  aria-pressed={form.visibility === value}
+                  onClick={() => setForm({ ...form, visibility: value })}
+                  className={`rounded-md border px-3 py-2 text-sm transition duration-300 ${form.visibility === value ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              “Aberto ao público” aparece na agenda com a etiqueta dourada. “Privado” marca o evento como fechado (particular ou corporativo).
+            </p>
+          </div>
           {msg && <p className="text-sm text-primary sm:col-span-2">{msg}</p>}
           <div className="flex gap-3 sm:col-span-2">
             <button className={`${btnGold} flex-1`}>{form.id ? "Salvar alterações" : "Adicionar"}</button>
@@ -304,8 +324,16 @@ function AgendaAdmin() {
             return (
               <li key={s.id} className={`flex items-center gap-4 py-3 ${past ? "opacity-50" : ""}`}>
                 <div className="w-14 text-center"><div className="font-display text-xl font-bold text-primary">{day}</div><div className="text-xs text-muted-foreground">{month}</div></div>
-                <div className="min-w-0 flex-1"><div className="font-medium">{s.name}</div><div className="text-xs text-muted-foreground">{s.city} · {s.event_time}{past ? " · já passou" : ""}</div></div>
-                <button onClick={() => setForm({ id: s.id, name: s.name, city: s.city, event_date: s.event_date, event_time: s.event_time })} className="text-sm text-primary hover:underline">Editar</button>
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium">{s.name}</div>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+                    <span>{s.city} · {s.event_time}{past ? " · já passou" : ""}</span>
+                    <span className={`rounded-full border px-2 py-0.5 text-[10px] ${normalizeShowAccess(s.visibility) === "private" ? "border-border" : "border-primary/40 text-primary"}`}>
+                      {showAccessShortLabel(normalizeShowAccess(s.visibility))}
+                    </span>
+                  </div>
+                </div>
+                <button onClick={() => setForm({ id: s.id, name: s.name, city: s.city, event_date: s.event_date, event_time: s.event_time, visibility: normalizeShowAccess(s.visibility) })} className="text-sm text-primary hover:underline">Editar</button>
                 <button onClick={() => remove(s.id)} aria-label="Remover" className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
               </li>
             );

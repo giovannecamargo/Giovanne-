@@ -46,6 +46,7 @@ export type Database = {
           event_time: string
           id: string
           name: string
+          visibility: string
         }
         Insert: {
           city?: string
@@ -54,6 +55,7 @@ export type Database = {
           event_time?: string
           id?: string
           name: string
+          visibility?: string
         }
         Update: {
           city?: string
@@ -62,6 +64,7 @@ export type Database = {
           event_time?: string
           id?: string
           name?: string
+          visibility?: string
         }
         Relationships: []
       }

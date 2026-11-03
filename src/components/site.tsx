@@ -1,10 +1,11 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import {
-  Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote, ExternalLink,
+  Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote, ExternalLink, Lock,
 } from "lucide-react";
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
+import { normalizeShowAccess, showAccessLabel } from "@/lib/show-access";
 import { useLogoBg } from "@/lib/logo-bg";
 import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
@@ -202,7 +203,7 @@ export function Testimonials() {
 
 export function Agenda() {
   const { data: shows, isLoading } = useShows();
-  const events = (shows ?? []).map((e) => ({ ...formatShowDate(e.event_date), name: e.name, city: e.city, time: e.event_time }));
+  const events = (shows ?? []).map((e) => ({ ...formatShowDate(e.event_date), name: e.name, city: e.city, time: e.event_time, access: normalizeShowAccess(e.visibility) }));
   return (
     <section className="mx-auto max-w-5xl px-5 pb-24 pt-32">
       <SectionTitle eyebrow="Próximos shows" title="Agenda" />
@@ -216,9 +217,13 @@ export function Agenda() {
             </div>
             <div className="min-w-0">
               <h3 className="truncate font-semibold">{e.name}</h3>
-              <div className="mt-1 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
+              <div className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{e.city}</span>
                 <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{e.time}</span>
+                <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium tracking-wide ${e.access === "private" ? "border-border text-muted-foreground" : "border-primary/40 text-primary"}`}>
+                  {e.access === "private" ? <Lock className="h-3 w-3" /> : <Users className="h-3 w-3" />}
+                  {showAccessLabel(e.access)}
+                </span>
               </div>
             </div>
             <a href={whatsappLink()} target="_blank" rel="noreferrer" className="col-span-2 text-sm text-primary hover:underline sm:col-span-1">Informações</a>
