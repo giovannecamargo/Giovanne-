@@ -288,7 +288,7 @@ export function Partners() {
 
 function SponsorCard({ p, i }: { p: any; i: number }) {
   const panel = (
-    <div className="relative flex h-40 items-center justify-center overflow-hidden bg-white p-5">
+    <div className="relative flex h-48 items-center justify-center overflow-hidden bg-white p-5">
       <img
         src={p.logo}
         alt={`Logo de ${p.name}`}
