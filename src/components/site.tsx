@@ -398,16 +398,20 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
   return (
     <section className="mx-auto max-w-7xl px-5 pb-24 pt-32">
       <SectionTitle eyebrow="Multimídia" title="Galeria" />
-      <div className="grid gap-4 md:grid-cols-2">
-        {videos.length ? videos.map((id) => (
-          <iframe key={id} className="aspect-video w-full" src={`https://www.youtube.com/embed/${id}`} title="Vídeo" allowFullScreen loading="lazy" />
-        )) : [0, 1].map((i) => (
-          <div key={i} style={d(3 + i)} className="reveal flex aspect-video flex-col items-center justify-center gap-3 border border-dashed border-border bg-card/40">
-            <PlayCircle className="h-12 w-12 text-primary" strokeWidth={1.2} />
-            <span className="text-xs uppercase tracking-widest text-muted-foreground">Vídeo em breve</span>
-          </div>
-        ))}
-      </div>
+      {videos.length ? (
+        <div className="flex flex-wrap justify-center gap-4">
+          {videos.map((v, i) => <VideoItem key={v.kind === "youtube" ? v.id : v.src} v={v} i={i} />)}
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2">
+          {[0, 1].map((i) => (
+            <div key={i} style={d(3 + i)} className="reveal flex aspect-video flex-col items-center justify-center gap-3 border border-dashed border-border bg-card/40">
+              <PlayCircle className="h-12 w-12 text-primary" strokeWidth={1.2} />
+              <span className="text-xs uppercase tracking-widest text-muted-foreground">Vídeo em breve</span>
+            </div>
+          ))}
+        </div>
+      )}
       <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
         {items.map((g, i) => (
           <button key={i} onClick={() => onOpen(g.src)} style={d(5 + Math.min(i, 6))} className="reveal-img aspect-square overflow-hidden rounded-sm">
@@ -416,6 +420,29 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
         ))}
       </div>
     </section>
+  );
+}
+
+function VideoItem({ v, i }: { v: GalleryVideo; i: number }) {
+  const shell = v.vertical
+    ? "h-[420px] w-full max-w-[420px] basis-[280px] sm:h-[520px] lg:h-[560px]"
+    : "aspect-video w-full max-w-[760px] basis-[420px]";
+  return (
+    <div style={d(3 + i)} className={`reveal flex-1 overflow-hidden rounded-sm border border-border bg-card ${shell}`}>
+      {v.kind === "youtube" ? (
+        <iframe className="h-full w-full" src={`https://www.youtube.com/embed/${v.id}`} title={v.alt} allowFullScreen loading="lazy" />
+      ) : (
+        <video
+          className="h-full w-full object-contain"
+          src={v.src}
+          poster={v.poster}
+          controls
+          playsInline
+          preload="none"
+          aria-label={v.alt}
+        />
+      )}
+    </div>
   );
 }
 
