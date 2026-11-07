@@ -4,6 +4,7 @@ import {
   Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote, ExternalLink, Lock,
 } from "lucide-react";
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
+import type { GalleryVideo } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
 import { normalizeShowAccess, showAccessLabel } from "@/lib/show-access";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
