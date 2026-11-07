@@ -8,6 +8,8 @@ import { formatShowDate, signedUrls } from "@/lib/content";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import { normalizeShowAccess, showAccessShortLabel, type ShowAccess } from "@/lib/show-access";
 import type { Session } from "@supabase/supabase-js";
+import { AdminVideos } from "@/components/admin-videos";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -119,13 +121,13 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Dashboard() {
-  const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria">("sponsors");
-  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Fotos de Shows"], ["galeria", "Fotos da Galeria"]] as const;
+  const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "videos">("sponsors");
+  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Fotos de Shows"], ["galeria", "Fotos da Galeria"], ["videos", "Vídeos da Galeria"]] as const;
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-2">
         {tabs.map(([k, l]) => (
-          <button key={k} onClick={() => setTab(k)} className={tab === k ? `${btnGold} px-4 py-2` : `${btnOutline} px-4 py-2`}>{l}</button>
+          <Button key={k} onClick={() => setTab(k)} variant={tab === k ? "default" : "outline"} aria-pressed={tab === k}>{l}</Button>
         ))}
         <button onClick={() => supabase.auth.signOut()} className="ml-auto inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><LogOut className="h-4 w-4" />Sair</button>
       </div>
@@ -133,6 +135,7 @@ function Dashboard() {
       {tab === "agenda" && <AgendaAdmin />}
       {tab === "shows" && <PhotosAdmin section="shows" />}
       {tab === "galeria" && <PhotosAdmin section="galeria" />}
+      {tab === "videos" && <AdminVideos />}
     </div>
   );
 }
