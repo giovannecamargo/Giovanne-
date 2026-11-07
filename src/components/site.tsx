@@ -425,27 +425,28 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
 }
 
 function VideoItem({ v, i }: { v: GalleryVideo; i: number }) {
-  const shell = v.vertical
-    ? "h-[420px] w-full max-w-[420px] basis-[280px] sm:h-[520px] lg:h-[560px]"
-    : "aspect-video w-full max-w-[760px] basis-[420px]";
-  return (
-    <div style={d(3 + i)} className={`reveal flex-1 overflow-hidden rounded-sm border border-border bg-card ${shell}`}>
-      {v.kind === "youtube" ? (
+  if (v.kind === "youtube") {
+    return (
+      <div style={d(3 + i)} className="reveal aspect-video w-full max-w-[760px] flex-1 basis-[420px] overflow-hidden rounded-sm border border-border bg-card">
         <iframe className="h-full w-full" src={`https://www.youtube.com/embed/${v.id}`} title={v.alt} allowFullScreen loading="lazy" />
-      ) : (
-        <video
-          className="h-full w-full object-contain"
-          src={v.src}
-          poster={v.poster}
-          controls
-          playsInline
-          preload="none"
-          aria-label={v.alt}
-        />
-      )}
-    </div>
+      </div>
+    );
+  }
+  // O player toma o formato do arquivo: sem faixas vazias ao redor.
+  return (
+    <video
+      style={d(3 + i)}
+      className="reveal h-auto w-auto max-h-[420px] max-w-full rounded-sm border border-border bg-card sm:max-h-[520px] lg:max-h-[560px]"
+      src={v.src}
+      poster={v.poster}
+      controls
+      playsInline
+      preload="none"
+      aria-label={v.alt}
+    />
   );
 }
+
 
 export function Contact() {
   return (
