@@ -3,13 +3,16 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Film, Grid2X2, ImageIcon, Play, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePhotos } from "@/lib/content";
-import { gallery, videos, type GalleryVideo } from "@/data/site";
+import { gallery, type GalleryVideo } from "@/data/site";
+import { useGalleryVideos } from "@/lib/gallery-videos";
 import { availableGalleryFilters, filterGalleryPhotos, nextGalleryIndex, uniqueGalleryPhotos, type GalleryFilter, type GalleryPhoto } from "@/lib/gallery-media";
 
 const labels: Record<GalleryFilter, string> = { all: "Todas", shows: "Shows", bastidores: "Bastidores", videos: "Vídeos" };
 
 export function EditorialGallery() {
   const { data, isLoading, isError, refetch } = usePhotos("galeria");
+  const { data: registeredVideos = [], isLoading: videosLoading, isError: videosError } = useGalleryVideos();
+  const videos: GalleryVideo[] = registeredVideos.flatMap(v => v.src ? [{ kind: "file" as const, src: v.src, ...(v.poster ? { poster: v.poster } : {}), alt: v.caption }] : []);
   const [filter, setFilter] = useState<GalleryFilter>("all");
   const [activeVideo, setActiveVideo] = useState(0);
   const [photoId, setPhotoId] = useState<string | null>(null);
@@ -21,7 +24,8 @@ export function EditorialGallery() {
   const filters = availableGalleryFilters(items, videos.length);
   const photos = filterGalleryPhotos(items, filter);
   const showVideo = (filter === "all" || filter === "videos") && videos.length > 0;
-  const video = videos[activeVideo];
+  const selectedVideo = Math.min(activeVideo, Math.max(0, videos.length - 1));
+  const video = videos[selectedVideo];
   const featuredPhotos = showVideo ? photos.slice(0, 2) : [];
   const gridPhotos = showVideo ? photos.slice(2) : photos;
   const photoIndex = photos.findIndex((p) => p.id === photoId);
@@ -62,15 +66,17 @@ export function EditorialGallery() {
 
       {isError && <div role="alert" className="mb-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">Não foi possível carregar todas as fotos.<Button variant="outline" onClick={() => refetch()}>Tentar novamente</Button></div>}
       {isLoading && <p role="status" className="mb-4 text-sm text-muted-foreground">Carregando fotos…</p>}
+      {videosLoading && <p role="status" className="mb-4 text-sm text-muted-foreground">Carregando vídeos…</p>}
+      {videosError && <p role="alert" className="mb-4 text-sm text-muted-foreground">Não foi possível carregar os vídeos.</p>}
 
       {showVideo && video && <div ref={featureRef} className={`grid items-stretch gap-4 ${featuredPhotos.length ? "lg:grid-cols-[3fr_2fr]" : "mx-auto max-w-3xl"}`}>
         <div className="min-w-0">
           <div className="relative overflow-hidden rounded-sm border border-border bg-card">
-            <GalleryPlayer key={activeVideo} video={video} />
+            <GalleryPlayer key={video.kind === "file" ? video.src : video.id} video={video} />
           </div>
           <div className="flex items-center justify-between gap-4 border-b border-border py-4">
-            <div className="flex min-w-0 items-center gap-3"><Play className="size-4 shrink-0 text-primary" /><span className="text-sm font-medium">Ao vivo</span></div>
-            <span className="text-xs text-muted-foreground">{String(activeVideo + 1).padStart(2, "0")} / {String(videos.length).padStart(2, "0")}</span>
+            <div className="flex min-w-0 items-center gap-3"><Play className="size-4 shrink-0 text-primary" /><span className="text-sm font-medium break-words">{video.alt}</span></div>
+            <span className="shrink-0 text-xs text-muted-foreground">{String(selectedVideo + 1).padStart(2, "0")} / {String(videos.length).padStart(2, "0")}</span>
           </div>
         </div>
         {!!featuredPhotos.length && <div className={`grid gap-4 ${featuredPhotos.length === 1 ? "grid-rows-1" : "lg:grid-rows-2"}`}>

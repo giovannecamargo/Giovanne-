@@ -36,6 +36,20 @@
       "when": 1793666547999,
       "tag": "0004_add_show_details_ticket",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794088424664,
+      "tag": "0005_gallery_video_management",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794088450239,
+      "tag": "0006_gallery_video_mixed_media",
+      "breakpoints": true
     }
   ]
 }
