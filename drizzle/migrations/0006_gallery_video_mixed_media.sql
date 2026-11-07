@@ -1,0 +1,2 @@
+ALTER TABLE public.gallery_videos DROP CONSTRAINT gallery_video_paths_valid;
+ALTER TABLE public.gallery_videos ADD CONSTRAINT gallery_video_paths_valid CHECK ((video_path ~ '^videos/[a-zA-Z0-9._/-]+$' OR video_path ~ '^/__l5e/assets-v1/') AND (cover_path ~ '^video-covers/[a-zA-Z0-9._/-]+$' OR cover_path ~ '^/__l5e/assets-v1/'));
