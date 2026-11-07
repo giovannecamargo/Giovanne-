@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Gallery, Lightbox } from "@/components/site";
+import { EditorialGallery } from "@/components/editorial-gallery";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
@@ -17,6 +16,5 @@ export const Route = createFileRoute("/galeria")({
 });
 
 function Page() {
-  const [img, setImg] = useState<string | null>(null);
-  return (<><Gallery onOpen={setImg} /><Lightbox src={img} onClose={() => setImg(null)} /></>);
+  return <EditorialGallery />;
 }
