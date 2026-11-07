@@ -413,9 +413,9 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
           ))}
         </div>
       )}
-      <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
+      <div className="mt-4 flex flex-wrap justify-center gap-3">
         {items.map((g, i) => (
-          <button key={i} onClick={() => onOpen(g.src)} style={d(5 + Math.min(i, 6))} className="reveal-img aspect-square overflow-hidden rounded-sm">
+          <button key={i} onClick={() => onOpen(g.src)} style={d(5 + Math.min(i, 6))} className="reveal-img h-24 w-24 overflow-hidden rounded-sm sm:h-28 sm:w-28">
             <img src={g.src} alt={g.alt} loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition duration-500 hover:scale-105" />
           </button>
         ))}
