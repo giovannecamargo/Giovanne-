@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      gallery_videos: {
+        Row: {
+          caption: string
+          cover_path: string
+          created_at: string
+          id: string
+          source_kind: string
+          video_path: string
+        }
+        Insert: {
+          caption: string
+          cover_path: string
+          created_at?: string
+          id?: string
+          source_kind?: string
+          video_path: string
+        }
+        Update: {
+          caption?: string
+          cover_path?: string
+          created_at?: string
+          id?: string
+          source_kind?: string
+          video_path?: string
+        }
+        Relationships: []
+      }
       photos: {
         Row: {
           alt: string
