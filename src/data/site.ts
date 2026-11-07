@@ -38,8 +38,8 @@ export const partners: { name: string; logo: string }[] = [];
 
 // Vídeos da galeria: "file" = arquivo publicado na CDN, "youtube" = ID do vídeo.
 export type GalleryVideo =
-  | { kind: "file"; src: string; poster?: string; alt: string; vertical?: boolean }
-  | { kind: "youtube"; id: string; alt: string; vertical?: boolean };
+  | { kind: "file"; src: string; poster?: string; alt: string }
+  | { kind: "youtube"; id: string; alt: string };
 
 export const videos: GalleryVideo[] = [
   {
@@ -47,7 +47,6 @@ export const videos: GalleryVideo[] = [
     src: videoGaleria01.url,
     poster: videoGaleria01Capa.url,
     alt: "Giovanne Camargo cantando ao vivo no Royal Lounge, de chapéu e violão",
-    vertical: true,
   },
 ];
 
