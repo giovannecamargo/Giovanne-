@@ -12,7 +12,7 @@ const labels: Record<GalleryFilter, string> = { all: "Todas", shows: "Shows", ba
 export function EditorialGallery() {
   const { data, isLoading, isError, refetch } = usePhotos("galeria");
   const { data: registeredVideos = [], isLoading: videosLoading, isError: videosError } = useGalleryVideos();
-  const videos: GalleryVideo[] = registeredVideos.flatMap(v => v.src ? [{ kind: "file" as const, src: v.src, poster: v.poster, alt: v.caption }] : []);
+  const videos: GalleryVideo[] = registeredVideos.flatMap(v => v.src ? [{ kind: "file" as const, src: v.src, ...(v.poster ? { poster: v.poster } : {}), alt: v.caption }] : []);
   const [filter, setFilter] = useState<GalleryFilter>("all");
   const [activeVideo, setActiveVideo] = useState(0);
   const [photoId, setPhotoId] = useState<string | null>(null);
