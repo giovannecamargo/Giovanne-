@@ -4,6 +4,7 @@ import {
   Music2, CalendarDays, Users, PlayCircle, Menu, X, MessageCircle, Instagram, MapPin, Clock, ArrowRight, Plus, Quote, ExternalLink, Lock,
 } from "lucide-react";
 import { gallery, nav, photos, videos, whatsappLink, INSTAGRAM_URL } from "@/data/site";
+import type { GalleryVideo } from "@/data/site";
 import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/content";
 import { normalizeShowAccess, showAccessLabel } from "@/lib/show-access";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
@@ -398,19 +399,23 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
   return (
     <section className="mx-auto max-w-7xl px-5 pb-24 pt-32">
       <SectionTitle eyebrow="Multimídia" title="Galeria" />
-      <div className="grid gap-4 md:grid-cols-2">
-        {videos.length ? videos.map((id) => (
-          <iframe key={id} className="aspect-video w-full" src={`https://www.youtube.com/embed/${id}`} title="Vídeo" allowFullScreen loading="lazy" />
-        )) : [0, 1].map((i) => (
-          <div key={i} style={d(3 + i)} className="reveal flex aspect-video flex-col items-center justify-center gap-3 border border-dashed border-border bg-card/40">
-            <PlayCircle className="h-12 w-12 text-primary" strokeWidth={1.2} />
-            <span className="text-xs uppercase tracking-widest text-muted-foreground">Vídeo em breve</span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
+      {videos.length ? (
+        <div className="flex flex-wrap justify-center gap-4">
+          {videos.map((v, i) => <VideoItem key={v.kind === "youtube" ? v.id : v.src} v={v} i={i} />)}
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2">
+          {[0, 1].map((i) => (
+            <div key={i} style={d(3 + i)} className="reveal flex aspect-video flex-col items-center justify-center gap-3 border border-dashed border-border bg-card/40">
+              <PlayCircle className="h-12 w-12 text-primary" strokeWidth={1.2} />
+              <span className="text-xs uppercase tracking-widest text-muted-foreground">Vídeo em breve</span>
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="mt-4 flex flex-wrap justify-center gap-3">
         {items.map((g, i) => (
-          <button key={i} onClick={() => onOpen(g.src)} style={d(5 + Math.min(i, 6))} className="reveal-img aspect-square overflow-hidden rounded-sm">
+          <button key={i} onClick={() => onOpen(g.src)} style={d(5 + Math.min(i, 6))} className="reveal-img h-24 w-24 overflow-hidden rounded-sm sm:h-28 sm:w-28">
             <img src={g.src} alt={g.alt} loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition duration-500 hover:scale-105" />
           </button>
         ))}
@@ -418,6 +423,30 @@ export function Gallery({ onOpen }: { onOpen: (src: string) => void }) {
     </section>
   );
 }
+
+function VideoItem({ v, i }: { v: GalleryVideo; i: number }) {
+  if (v.kind === "youtube") {
+    return (
+      <div style={d(3 + i)} className="reveal aspect-video w-full max-w-[760px] flex-1 basis-[420px] overflow-hidden rounded-sm border border-border bg-card">
+        <iframe className="h-full w-full" src={`https://www.youtube.com/embed/${v.id}`} title={v.alt} allowFullScreen loading="lazy" />
+      </div>
+    );
+  }
+  // O player toma o formato do arquivo: sem faixas vazias ao redor.
+  return (
+    <video
+      style={d(3 + i)}
+      className="reveal h-auto w-auto max-h-[420px] max-w-full rounded-sm border border-border bg-card sm:max-h-[520px] lg:max-h-[560px]"
+      src={v.src}
+      poster={v.poster}
+      controls
+      playsInline
+      preload="none"
+      aria-label={v.alt}
+    />
+  );
+}
+
 
 export function Contact() {
   return (
