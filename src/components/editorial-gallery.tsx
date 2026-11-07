@@ -81,7 +81,7 @@ export function EditorialGallery() {
       {!!gridPhotos.length && <div className={showVideo ? "mt-10" : ""}>
         {showVideo && <div className="mb-5 flex items-center justify-between border-b border-border pb-4"><h2 className="text-lg font-semibold">Em cena</h2><ImageIcon className="size-4 text-primary" /></div>}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
-          {gridPhotos.map((photo, i) => <PhotoTile key={photo.id} photo={photo} onOpen={() => setPhotoId(photo.id)} className={gridPhotos.length === 1 ? "lg:col-span-12" : i % 4 === 0 || i % 4 === 3 ? "lg:col-span-7" : "lg:col-span-5"} />)}
+          {gridPhotos.map((photo, i) => <PhotoTile key={photo.id} photo={photo} onOpen={() => setPhotoId(photo.id)} className={i === gridPhotos.length - 1 && gridPhotos.length % 2 === 1 ? "sm:col-span-2 lg:col-span-12" : i % 4 === 0 || i % 4 === 3 ? "lg:col-span-7" : "lg:col-span-5"} />)}
         </div>
       </div>}
 
