@@ -122,7 +122,7 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 
 function Dashboard() {
   const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "videos">("sponsors");
-  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Fotos de Shows"], ["galeria", "Fotos da Galeria"], ["videos", "Vídeos dos Shows"]] as const;
+  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"]] as const;
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-2">
@@ -133,9 +133,8 @@ function Dashboard() {
       </div>
       {tab === "sponsors" && <Sponsors />}
       {tab === "agenda" && <AgendaAdmin />}
-      {tab === "shows" && <PhotosAdmin section="shows" />}
+      {tab === "shows" && <div className="space-y-12"><section><h2 className="mb-4 text-xl font-semibold">Fotos da página Shows</h2><PhotosAdmin section="shows" /></section><section><h2 className="mb-4 text-xl font-semibold">Vídeos da página Shows</h2><AdminVideos /></section></div>}
       {tab === "galeria" && <PhotosAdmin section="galeria" />}
-      {tab === "videos" && <AdminVideos />}
     </div>
   );
 }
