@@ -162,6 +162,8 @@ function Sponsors() {
   const [busy, setBusy] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [editLink, setEditLink] = useState("");
+  const [renewId, setRenewId] = useState<string | null>(null);
+  const [renewEnd, setRenewEnd] = useState(plusDays(30));
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-sponsors"] }); qc.invalidateQueries({ queryKey: ["sponsors"] }); };
 
   async function add(e: FormEvent) {
@@ -188,6 +190,14 @@ function Sponsors() {
     const { error } = await supabase.from("sponsors").update({ link_url: url }).eq("id", id);
     if (error) return setMsg("Não foi possível salvar o link.");
     setEditId(null); refresh(); setMsg(url ? "Link atualizado." : "Link removido — o logo volta a não ser clicável.");
+  }
+
+  async function renew(id: string) {
+    const ends = new Date(`${renewEnd}T23:59:59`);
+    if (ends.getTime() <= Date.now()) return setMsg("Escolha uma data futura para renovar.");
+    const { error } = await supabase.from("sponsors").update({ ends_at: ends.toISOString() }).eq("id", id);
+    if (error) return setMsg("Não foi possível renovar.");
+    setRenewId(null); refresh(); setMsg(`Renovado até ${ends.toLocaleDateString("pt-BR")}.`);
   }
 
   async function remove(id: string, path: string) {
@@ -231,6 +241,16 @@ function Sponsors() {
                     {new Date(s.starts_at).toLocaleDateString("pt-BR")} até {new Date(s.ends_at).toLocaleDateString("pt-BR")} ·{" "}
                     <span className={active ? "text-primary" : ""}>{active ? "No site" : future ? "Agendado" : "Expirado (fora do site)"}</span>
                   </div>
+                  {renewId === s.id ? (
+                    <div className="mt-2 flex max-w-md flex-wrap items-center gap-2">
+                      <span className="text-xs">Novo prazo:</span>
+                      <input className={`${input} w-auto`} type="date" min={today()} value={renewEnd} onChange={(e) => setRenewEnd(e.target.value)} aria-label="Nova data final" />
+                      <button onClick={() => renew(s.id)} className="text-xs font-semibold text-primary hover:brightness-110">Salvar</button>
+                      <button onClick={() => setRenewId(null)} aria-label="Cancelar renovação" className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
+                    </div>
+                  ) : (
+                    <button onClick={() => { const base = Math.max(Date.now(), +new Date(s.ends_at)); setRenewEnd(new Date(base + 30 * 864e5).toISOString().slice(0, 10)); setRenewId(s.id); }} className="mt-1 text-xs font-semibold text-primary hover:underline">Renovar prazo</button>
+                  )}
                   {editing ? (
                     <div className="mt-2 flex max-w-md items-center gap-2">
                       <input className={input} placeholder="https://www.exemplo.com.br" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
