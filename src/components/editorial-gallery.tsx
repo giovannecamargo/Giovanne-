@@ -4,15 +4,15 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Film, Grid2X2, ImageIcon, Play, X 
 import { Button } from "@/components/ui/button";
 import { usePhotos } from "@/lib/content";
 import { gallery, type GalleryVideo } from "@/data/site";
-import { useGalleryVideos } from "@/lib/gallery-videos";
 import { availableGalleryFilters, filterGalleryPhotos, nextGalleryIndex, uniqueGalleryPhotos, type GalleryFilter, type GalleryPhoto } from "@/lib/gallery-media";
 
 const labels: Record<GalleryFilter, string> = { all: "Todas", shows: "Shows", bastidores: "Bastidores", videos: "Vídeos" };
 
 export function EditorialGallery() {
   const { data, isLoading, isError, refetch } = usePhotos("galeria");
-  const { data: registeredVideos = [], isLoading: videosLoading, isError: videosError } = useGalleryVideos();
-  const videos: GalleryVideo[] = registeredVideos.flatMap(v => v.src ? [{ kind: "file" as const, src: v.src, ...(v.poster ? { poster: v.poster } : {}), alt: v.caption }] : []);
+  // Vídeos ficam na página Shows.
+  const videosLoading = false, videosError = false;
+  const videos: GalleryVideo[] = [];
   const [filter, setFilter] = useState<GalleryFilter>("all");
   const [activeVideo, setActiveVideo] = useState(0);
   const [photoId, setPhotoId] = useState<string | null>(null);

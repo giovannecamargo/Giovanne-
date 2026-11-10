@@ -122,7 +122,7 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 
 function Dashboard() {
   const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "videos">("sponsors");
-  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Fotos de Shows"], ["galeria", "Fotos da Galeria"], ["videos", "Vídeos da Galeria"]] as const;
+  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Fotos de Shows"], ["galeria", "Fotos da Galeria"], ["videos", "Vídeos dos Shows"]] as const;
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-2">
