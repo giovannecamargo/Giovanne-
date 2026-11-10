@@ -5,9 +5,9 @@ export const Route = createFileRoute("/sobre")({
   head: () => ({
     meta: [
       { title: "Sobre — Giovanne Camargo" },
-      { name: "description", content: "Conheça a trajetória e a música do cantor sertanejo Giovanne Camargo." },
+      { name: "description", content: "Conheça a trajetória de Giovanne Camargo: as raízes no sertanejo, 12 anos de estrada, referências musicais e a conexão com o público." },
       { property: "og:title", content: "Sobre — Giovanne Camargo" },
-      { property: "og:description", content: "Conheça a trajetória e a música do cantor sertanejo Giovanne Camargo." },
+      { property: "og:description", content: "Conheça a trajetória de Giovanne Camargo: as raízes no sertanejo, 12 anos de estrada, referências musicais e a conexão com o público." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

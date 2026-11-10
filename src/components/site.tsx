@@ -9,6 +9,7 @@ import { useShows, usePhotos, useActiveSponsors, formatShowDate } from "@/lib/co
 import { normalizeShowAccess, showAccessLabel } from "@/lib/show-access";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import { useLogoBg } from "@/lib/logo-bg";
+import { bio } from "@/data/bio";
 import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
 export const btnGold = "inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition duration-300 hover:brightness-110";
@@ -172,17 +173,44 @@ export function Highlights() {
 
 export function About() {
   return (
-    <section className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-24 pt-32 md:grid-cols-2">
-      <img src={photos.pb} alt="Giovanne Camargo em apresentação" loading="lazy" decoding="async" className="reveal-img aspect-[4/5] w-full rounded-sm object-cover object-top" />
-      <div>
-        <SectionTitle eyebrow="Biografia" title="Sobre o Artista" />
-        <div className="reveal" style={d(3)}><Placeholder>Aguardando texto oficial</Placeholder></div>
-        <p className="reveal mt-5 leading-relaxed text-muted-foreground" style={d(4)}>
-          Espaço reservado para a biografia e trajetória musical de Giovanne Camargo. O texto oficial será inserido aqui assim que for enviado pelo artista.
-        </p>
-        <Link to="/contato" className={`${btnOutline} reveal mt-8`} style={d(5)}>Fale com o artista <ArrowRight className="h-4 w-4" /></Link>
-      </div>
-    </section>
+    <>
+      <section className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-14 pt-32 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <img src={photos.pb} alt="Giovanne Camargo em apresentação" loading="lazy" decoding="async" className="reveal-img aspect-[4/5] w-full rounded-sm object-cover object-top" />
+        <div>
+          <SectionTitle eyebrow="Biografia" title="Sobre o Artista" />
+          <p className="reveal mt-2 text-lg leading-relaxed text-foreground/90 sm:text-xl" style={d(3)}>{bio.lead}</p>
+          <dl className="reveal mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-border pt-6" style={d(4)}>
+            {bio.facts.map((f) => (
+              <div key={f.label}>
+                <dt className="eyebrow text-primary">{f.label}</dt>
+                <dd className="mt-1 text-sm font-medium sm:text-base">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <Link to="/contato" className={`${btnOutline} reveal mt-8`} style={d(5)}>Fale com o artista <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-4xl px-5 pb-16">
+        {bio.sections.map((s, i) => (
+          <article key={s.title} className="reveal border-t border-border py-9 first:border-t-0 first:pt-0" style={d(3 + i)}>
+            <h2 className="flex items-baseline gap-4 text-xl font-bold sm:text-2xl">
+              <span className="font-display text-xs font-bold tabular-nums tracking-widest text-primary/70">{String(i + 1).padStart(2, "0")}</span>
+              {s.title}
+            </h2>
+            <div className="mt-4 space-y-4 sm:pl-9">
+              {s.paragraphs.map((p, j) => <p key={j} className="leading-relaxed text-muted-foreground">{p}</p>)}
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section className="mx-auto max-w-4xl px-5 pb-24">
+        <blockquote className="reveal border-l-2 border-primary pl-6" style={d(4)}>
+          <p className="font-display text-lg font-semibold leading-relaxed sm:text-2xl">{bio.tagline}</p>
+        </blockquote>
+      </section>
+    </>
   );
 }
 
