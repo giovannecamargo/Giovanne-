@@ -240,6 +240,7 @@ function Sponsors() {
                   <div className="text-xs text-muted-foreground">
                     {new Date(s.starts_at).toLocaleDateString("pt-BR")} até {new Date(s.ends_at).toLocaleDateString("pt-BR")} ·{" "}
                     <span className={active ? "text-primary" : ""}>{active ? "No site" : future ? "Agendado" : "Expirado (fora do site)"}</span>
+                    <button onClick={() => { const base = Math.max(Date.now(), +new Date(s.ends_at)); setRenewEnd(new Date(base + 30 * 864e5).toISOString().slice(0, 10)); setRenewId(s.id); }} aria-label="Mudar data final do patrocinador" title="Mudar data final" className="ml-2 inline-flex align-middle text-muted-foreground hover:text-primary"><Pencil className="h-3.5 w-3.5" /></button>
                   </div>
                   {renewId === s.id ? (
                     <div className="mt-2 flex max-w-md flex-wrap items-center gap-2">
@@ -248,9 +249,7 @@ function Sponsors() {
                       <button onClick={() => renew(s.id)} className="text-xs font-semibold text-primary hover:brightness-110">Salvar</button>
                       <button onClick={() => setRenewId(null)} aria-label="Cancelar renovação" className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
                     </div>
-                  ) : (
-                    <button onClick={() => { const base = Math.max(Date.now(), +new Date(s.ends_at)); setRenewEnd(new Date(base + 30 * 864e5).toISOString().slice(0, 10)); setRenewId(s.id); }} className="mt-1 text-xs font-semibold text-primary hover:underline">Renovar prazo</button>
-                  )}
+                  ) : null}
                   {editing ? (
                     <div className="mt-2 flex max-w-md items-center gap-2">
                       <input className={input} placeholder="https://www.exemplo.com.br" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
