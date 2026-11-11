@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Trash2, LogOut, Upload, Pencil, Check, X } from "lucide-react";
+import { Trash2, LogOut, Upload, Pencil } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { btnGold, btnOutline } from "@/components/site";
 import { formatShowDate, signedUrls } from "@/lib/content";
@@ -162,8 +162,7 @@ function Sponsors() {
   const [busy, setBusy] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [editLink, setEditLink] = useState("");
-  const [renewId, setRenewId] = useState<string | null>(null);
-  const [renewEnd, setRenewEnd] = useState(plusDays(30));
+  const [editEnd, setEditEnd] = useState(plusDays(30));
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-sponsors"] }); qc.invalidateQueries({ queryKey: ["sponsors"] }); };
 
   async function add(e: FormEvent) {
@@ -184,20 +183,25 @@ function Sponsors() {
     setBusy(false);
   }
 
-  async function saveLink(id: string) {
-    const url = normalizeSponsorLink(editLink);
-    if (editLink.trim() && !url) return setMsg("Link inválido. Use algo como https://www.exemplo.com.br");
-    const { error } = await supabase.from("sponsors").update({ link_url: url }).eq("id", id);
-    if (error) return setMsg("Não foi possível salvar o link.");
-    setEditId(null); refresh(); setMsg(url ? "Link atualizado." : "Link removido — o logo volta a não ser clicável.");
+  function openEdit(s: { id: string; link: string | null; ends_at: string }) {
+    setEditId(s.id); setEditLink(s.link ?? "");
+    setEditEnd(new Date(s.ends_at).toLocaleDateString("sv-SE"));
   }
 
-  async function renew(id: string) {
-    const ends = new Date(`${renewEnd}T23:59:59`);
-    if (ends.getTime() <= Date.now()) return setMsg("Escolha uma data futura para renovar.");
-    const { error } = await supabase.from("sponsors").update({ ends_at: ends.toISOString() }).eq("id", id);
-    if (error) return setMsg("Não foi possível renovar.");
-    setRenewId(null); refresh(); setMsg(`Renovado até ${ends.toLocaleDateString("pt-BR")}.`);
+  async function saveEdit(id: string, currentEnd: string) {
+    const url = normalizeSponsorLink(editLink);
+    if (editLink.trim() && !url) return setMsg("Link inválido. Use algo como https://www.exemplo.com.br");
+    const patch: { link_url: string | null; ends_at?: string } = { link_url: url };
+    const changedDate = editEnd !== new Date(currentEnd).toLocaleDateString("sv-SE");
+    if (changedDate) {
+      const ends = new Date(`${editEnd}T23:59:59`);
+      if (Number.isNaN(ends.getTime()) || ends.getTime() <= Date.now()) return setMsg("Escolha uma data final futura.");
+      patch.ends_at = ends.toISOString();
+    }
+    const { error } = await supabase.from("sponsors").update(patch).eq("id", id);
+    if (error) return setMsg("Não foi possível salvar.");
+    setEditId(null); refresh();
+    setMsg(changedDate ? `Salvo. Fica no site até ${new Date(`${editEnd}T12:00:00`).toLocaleDateString("pt-BR")}.` : "Alterações salvas.");
   }
 
   async function remove(id: string, path: string) {
@@ -240,28 +244,28 @@ function Sponsors() {
                   <div className="text-xs text-muted-foreground">
                     {new Date(s.starts_at).toLocaleDateString("pt-BR")} até {new Date(s.ends_at).toLocaleDateString("pt-BR")} ·{" "}
                     <span className={active ? "text-primary" : ""}>{active ? "No site" : future ? "Agendado" : "Expirado (fora do site)"}</span>
-                    <button onClick={() => { const base = Math.max(Date.now(), +new Date(s.ends_at)); setRenewEnd(new Date(base + 30 * 864e5).toISOString().slice(0, 10)); setRenewId(s.id); }} aria-label="Mudar data final do patrocinador" title="Mudar data final" className="ml-2 inline-flex align-middle text-muted-foreground hover:text-primary"><Pencil className="h-3.5 w-3.5" /></button>
                   </div>
-                  {renewId === s.id ? (
-                    <div className="mt-2 flex max-w-md flex-wrap items-center gap-2">
-                      <span className="text-xs">Novo prazo:</span>
-                      <input className={`${input} w-auto`} type="date" min={today()} value={renewEnd} onChange={(e) => setRenewEnd(e.target.value)} aria-label="Nova data final" />
-                      <button onClick={() => renew(s.id)} className="text-xs font-semibold text-primary hover:brightness-110">Salvar</button>
-                      <button onClick={() => setRenewId(null)} aria-label="Cancelar renovação" className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
-                    </div>
-                  ) : null}
                   {editing ? (
-                    <div className="mt-2 flex max-w-md items-center gap-2">
-                      <input className={input} placeholder="https://www.exemplo.com.br" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
-                      <button onClick={() => saveLink(s.id)} aria-label="Salvar link" className="text-primary hover:brightness-110"><Check className="h-4 w-4" /></button>
-                      <button onClick={() => setEditId(null)} aria-label="Cancelar edição do link" className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
+                    <div className="mt-3 grid max-w-md gap-3 border border-primary/40 bg-background/40 p-3">
+                      <label className="grid gap-1 text-xs">
+                        <span className="font-semibold text-primary">Data final (até quando fica no site)</span>
+                        <input className={input} type="date" value={editEnd} onChange={(e) => setEditEnd(e.target.value)} aria-label="Nova data final" />
+                      </label>
+                      <label className="grid gap-1 text-xs">
+                        <span className="text-muted-foreground">Site do patrocinador (opcional)</span>
+                        <input className={input} placeholder="https://www.exemplo.com.br" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
+                      </label>
+                      <div className="flex gap-2">
+                        <button onClick={() => saveEdit(s.id, s.ends_at)} className={`${btnGold} px-4 py-2 text-xs`}>Salvar</button>
+                        <button onClick={() => setEditId(null)} className="px-3 py-2 text-xs text-muted-foreground hover:text-foreground">Cancelar</button>
+                      </div>
                     </div>
                   ) : (
-                    <div className="mt-1 flex items-center gap-2">
+                    <div className="mt-1 flex flex-wrap items-center gap-2">
                       {s.link
                         ? <a href={s.link} target="_blank" rel="noopener noreferrer" className="truncate text-xs text-primary hover:underline">{s.link}</a>
                         : <span className="text-xs text-muted-foreground">Sem site — logo não clicável</span>}
-                      <button onClick={() => { setEditId(s.id); setEditLink(s.link ?? ""); }} aria-label="Editar site do patrocinador" className="text-muted-foreground hover:text-primary"><Pencil className="h-3.5 w-3.5" /></button>
+                      <button onClick={() => openEdit(s)} className="inline-flex items-center gap-1 border border-primary/50 px-2 py-1 text-xs font-semibold text-primary hover:bg-primary/10"><Pencil className="h-3.5 w-3.5" /> Editar data e site</button>
                     </div>
                   )}
                 </div>
