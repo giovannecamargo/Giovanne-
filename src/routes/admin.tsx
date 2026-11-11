@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Trash2, LogOut, Upload, Pencil } from "lucide-react";
+import { Trash2, LogOut, Upload, Pencil, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { btnGold, btnOutline } from "@/components/site";
 import { formatShowDate, signedUrls } from "@/lib/content";
@@ -205,13 +205,18 @@ function Sponsors() {
   }
 
   const [dates, setDates] = useState<Record<string, string>>({});
+  const [renewId, setRenewId] = useState<string | null>(null);
+  const plusDaysFrom = (iso: string, n: number) => {
+    const base = Math.max(Date.now(), +new Date(iso));
+    return new Date(base + n * 86400000).toLocaleDateString("sv-SE");
+  };
   async function saveDate(id: string) {
     const value = dates[id]; if (!value) return;
     const ends = new Date(`${value}T23:59:59`);
     if (Number.isNaN(ends.getTime()) || ends.getTime() <= Date.now()) return setMsg("Escolha uma data final futura.");
     const { error } = await supabase.from("sponsors").update({ ends_at: ends.toISOString() }).eq("id", id);
     if (error) return setMsg("Não foi possível salvar a data.");
-    setDates(({ [id]: _, ...rest }) => rest); refresh();
+    setDates(({ [id]: _, ...rest }) => rest); setRenewId(null); refresh();
     setMsg(`Data salva. Fica no site até ${new Date(`${value}T12:00:00`).toLocaleDateString("pt-BR")}.`);
   }
 
@@ -255,13 +260,25 @@ function Sponsors() {
                   <div className="text-xs text-muted-foreground">
                     {new Date(s.starts_at).toLocaleDateString("pt-BR")} até {new Date(s.ends_at).toLocaleDateString("pt-BR")} ·{" "}
                     <span className={active ? "text-primary" : ""}>{active ? "No site" : future ? "Agendado" : "Expirado (fora do site)"}</span>
+                    {renewId !== s.id && (
+                      <button onClick={() => { setRenewId(s.id); setDates({ ...dates, [s.id]: plusDaysFrom(s.ends_at, 30) }); }} className={`${btnGold} ml-2 inline-flex items-center gap-1 px-3 py-1 text-xs`}>
+                        <RefreshCw className="h-3.5 w-3.5" /> Renovar
+                      </button>
+                    )}
                   </div>
+                  {renewId === s.id && (
+                    <div className="mt-2 flex flex-wrap items-end gap-2 border border-primary/40 bg-background/40 p-2">
+                      <label className="grid gap-1 text-xs">
+                        <span className="font-semibold text-primary">Nova data final</span>
+                        <input className={`${input} py-1`} type="date" aria-label={`Nova data final de ${s.name}`}
+                          value={dates[s.id] ?? ""} onChange={(e) => setDates({ ...dates, [s.id]: e.target.value })} />
+                      </label>
+                      <button onClick={() => saveDate(s.id)} className={`${btnGold} px-3 py-2 text-xs`}>Salvar</button>
+                      <button onClick={() => setRenewId(null)} className="px-3 py-2 text-xs text-muted-foreground hover:text-foreground">Cancelar</button>
+                    </div>
+                  )}
                   {editing ? (
                     <div className="mt-3 grid max-w-md gap-3 border border-primary/40 bg-background/40 p-3">
-                      <label className="grid gap-1 text-xs">
-                        <span className="font-semibold text-primary">Data final (até quando fica no site)</span>
-                        <input className={input} type="date" value={editEnd} onChange={(e) => setEditEnd(e.target.value)} aria-label="Nova data final" />
-                      </label>
                       <label className="grid gap-1 text-xs">
                         <span className="text-muted-foreground">Site do patrocinador (opcional)</span>
                         <input className={input} placeholder="https://www.exemplo.com.br" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
@@ -273,20 +290,11 @@ function Sponsors() {
                     </div>
                   ) : (
                     <>
-                    <div className="mt-2 flex flex-wrap items-end gap-2 border border-primary/40 bg-background/40 p-2">
-                      <label className="grid gap-1 text-xs">
-                        <span className="font-semibold text-primary">Ficar no site até</span>
-                        <input className={`${input} py-1`} type="date" aria-label={`Data final de ${s.name}`}
-                          value={dates[s.id] ?? new Date(s.ends_at).toLocaleDateString("sv-SE")}
-                          onChange={(e) => setDates({ ...dates, [s.id]: e.target.value })} />
-                      </label>
-                      <button onClick={() => saveDate(s.id)} disabled={!dates[s.id] || dates[s.id] === new Date(s.ends_at).toLocaleDateString("sv-SE")} className={`${btnGold} px-3 py-2 text-xs disabled:opacity-40`}>Salvar data</button>
-                    </div>
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       {s.link
                         ? <a href={s.link} target="_blank" rel="noopener noreferrer" className="truncate text-xs text-primary hover:underline">{s.link}</a>
                         : <span className="text-xs text-muted-foreground">Sem site — logo não clicável</span>}
-                      <button onClick={() => openEdit(s)} className="inline-flex items-center gap-1 border border-primary/50 px-2 py-1 text-xs font-semibold text-primary hover:bg-primary/10"><Pencil className="h-3.5 w-3.5" /> Editar data e site</button>
+                      <button onClick={() => openEdit(s)} className="inline-flex items-center gap-1 border border-primary/50 px-2 py-1 text-xs font-semibold text-primary hover:bg-primary/10"><Pencil className="h-3.5 w-3.5" /> Editar link</button>
                     </div>
                     </>
                   )}
