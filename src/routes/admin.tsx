@@ -204,6 +204,17 @@ function Sponsors() {
     setMsg(changedDate ? `Salvo. Fica no site até ${new Date(`${editEnd}T12:00:00`).toLocaleDateString("pt-BR")}.` : "Alterações salvas.");
   }
 
+  const [dates, setDates] = useState<Record<string, string>>({});
+  async function saveDate(id: string) {
+    const value = dates[id]; if (!value) return;
+    const ends = new Date(`${value}T23:59:59`);
+    if (Number.isNaN(ends.getTime()) || ends.getTime() <= Date.now()) return setMsg("Escolha uma data final futura.");
+    const { error } = await supabase.from("sponsors").update({ ends_at: ends.toISOString() }).eq("id", id);
+    if (error) return setMsg("Não foi possível salvar a data.");
+    setDates(({ [id]: _, ...rest }) => rest); refresh();
+    setMsg(`Data salva. Fica no site até ${new Date(`${value}T12:00:00`).toLocaleDateString("pt-BR")}.`);
+  }
+
   async function remove(id: string, path: string) {
     if (!confirm("Remover este patrocinador?")) return;
     await supabase.from("sponsors").delete().eq("id", id);
@@ -261,12 +272,23 @@ function Sponsors() {
                       </div>
                     </div>
                   ) : (
-                    <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <>
+                    <div className="mt-2 flex flex-wrap items-end gap-2 border border-primary/40 bg-background/40 p-2">
+                      <label className="grid gap-1 text-xs">
+                        <span className="font-semibold text-primary">Ficar no site até</span>
+                        <input className={`${input} py-1`} type="date" aria-label={`Data final de ${s.name}`}
+                          value={dates[s.id] ?? new Date(s.ends_at).toLocaleDateString("sv-SE")}
+                          onChange={(e) => setDates({ ...dates, [s.id]: e.target.value })} />
+                      </label>
+                      <button onClick={() => saveDate(s.id)} disabled={!dates[s.id] || dates[s.id] === new Date(s.ends_at).toLocaleDateString("sv-SE")} className={`${btnGold} px-3 py-2 text-xs disabled:opacity-40`}>Salvar data</button>
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
                       {s.link
                         ? <a href={s.link} target="_blank" rel="noopener noreferrer" className="truncate text-xs text-primary hover:underline">{s.link}</a>
                         : <span className="text-xs text-muted-foreground">Sem site — logo não clicável</span>}
                       <button onClick={() => openEdit(s)} className="inline-flex items-center gap-1 border border-primary/50 px-2 py-1 text-xs font-semibold text-primary hover:bg-primary/10"><Pencil className="h-3.5 w-3.5" /> Editar data e site</button>
                     </div>
+                    </>
                   )}
                 </div>
                 <button onClick={() => remove(s.id, s.logo_url)} aria-label="Remover" className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
