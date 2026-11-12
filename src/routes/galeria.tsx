@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { EditorialGallery } from "@/components/editorial-gallery";
+import galleryAsset from "@/assets/giovanne-palco.webp.asset.json";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
+    links: [{ rel: "preload", as: "image", href: galleryAsset.url, fetchpriority: "high" }],
     meta: [
       { title: "Galeria — Giovanne Camargo" },
       { name: "description", content: "Vídeos e fotos das apresentações de Giovanne Camargo." },

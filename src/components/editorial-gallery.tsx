@@ -18,8 +18,8 @@ export function EditorialGallery() {
   const [photoId, setPhotoId] = useState<string | null>(null);
   const featureRef = useRef<HTMLDivElement>(null);
   const items = uniqueGalleryPhotos([
-    ...(data ?? []).flatMap((p): GalleryPhoto[] => p.src ? [{ id: p.id, src: p.src, alt: p.alt || "Giovanne Camargo em apresentação", category: "shows" }] : []),
     ...gallery.map((p, i): GalleryPhoto => ({ ...p, id: `original-${i}`, category: "shows" })),
+    ...(data ?? []).flatMap((p): GalleryPhoto[] => p.src ? [{ id: p.id, src: p.src, alt: p.alt || "Giovanne Camargo em apresentação", category: "shows" }] : []),
   ]);
   const filters = availableGalleryFilters(items, videos.length);
   const photos = filterGalleryPhotos(items, filter);
@@ -87,7 +87,7 @@ export function EditorialGallery() {
       {!!gridPhotos.length && <div className={showVideo ? "mt-10" : ""}>
         {showVideo && <div className="mb-5 flex items-center justify-between border-b border-border pb-4"><h2 className="text-lg font-semibold">Em cena</h2><ImageIcon className="size-4 text-primary" /></div>}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
-          {gridPhotos.map((photo, i) => <PhotoTile key={photo.id} photo={photo} onOpen={() => setPhotoId(photo.id)} className={i === gridPhotos.length - 1 && gridPhotos.length % 2 === 1 ? "sm:col-span-2 lg:col-span-12" : i % 4 === 0 || i % 4 === 3 ? "lg:col-span-7" : "lg:col-span-5"} />)}
+          {gridPhotos.map((photo, i) => <PhotoTile key={photo.id} photo={photo} onOpen={() => setPhotoId(photo.id)} eager={!showVideo && i === 0} className={i === gridPhotos.length - 1 && gridPhotos.length % 2 === 1 ? "sm:col-span-2 lg:col-span-12" : i % 4 === 0 || i % 4 === 3 ? "lg:col-span-7" : "lg:col-span-5"} />)}
         </div>
       </div>}
 
@@ -115,9 +115,9 @@ export function EditorialGallery() {
   );
 }
 
-function PhotoTile({ photo, onOpen, featured, className = "" }: { photo: GalleryPhoto; onOpen: () => void; featured?: boolean; className?: string }) {
+function PhotoTile({ photo, onOpen, featured, eager = false, className = "" }: { photo: GalleryPhoto; onOpen: () => void; featured?: boolean; eager?: boolean; className?: string }) {
   return <Button variant="ghost" onClick={onOpen} aria-label={`Ampliar: ${photo.alt}`} className={`group relative block h-auto w-full overflow-hidden rounded-sm bg-card p-0 hover:bg-card ${featured ? "aspect-[4/5] lg:aspect-auto lg:min-h-0" : "aspect-[4/5] sm:aspect-[5/6]"} ${className}`}>
-    <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.03] group-hover:opacity-90 motion-reduce:transform-none" />
+    <img src={photo.src} alt={photo.alt} loading={eager ? "eager" : "lazy"} fetchPriority={eager ? "high" : "auto"} decoding="async" className="absolute inset-0 h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.03] group-hover:opacity-90 motion-reduce:transform-none" />
     <span className="absolute bottom-4 right-4 flex size-9 items-center justify-center rounded-full border border-foreground/30 bg-background/65 text-foreground transition-colors group-hover:border-primary group-hover:text-primary"><ArrowUpRight /></span>
   </Button>;
 }

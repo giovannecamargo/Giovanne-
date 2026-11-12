@@ -13,8 +13,8 @@ export function ShowsGallery() {
   const videos = videoData.filter((video) => video.src);
   const [photoId, setPhotoId] = useState<string | null>(null);
   const photos = uniqueGalleryPhotos([
-    ...(data ?? []).flatMap((photo): GalleryPhoto[] => photo.src ? [{ id: photo.id, src: photo.src, alt: photo.alt || "Giovanne Camargo no palco", category: "shows" }] : []),
     ...gallery.map((photo, index): GalleryPhoto => ({ ...photo, id: `show-original-${index}`, category: "shows" })),
+    ...(data ?? []).flatMap((photo): GalleryPhoto[] => photo.src ? [{ id: photo.id, src: photo.src, alt: photo.alt || "Giovanne Camargo no palco", category: "shows" }] : []),
   ]);
   const photoIndex = photos.findIndex((photo) => photo.id === photoId);
   const currentPhoto = photos[photoIndex];
@@ -51,7 +51,7 @@ export function ShowsGallery() {
       {isLoading && <p role="status" className="mb-4 text-sm text-muted-foreground">Carregando fotos…</p>}
 
       {!!photos.length && <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
-        {photos.map((photo, index) => <ShowPhotoTile key={photo.id} photo={photo} onOpen={() => setPhotoId(photo.id)} className={index === photos.length - 1 && photos.length % 2 === 1 ? "sm:col-span-2 lg:col-span-12" : index % 4 === 0 || index % 4 === 3 ? "lg:col-span-7" : "lg:col-span-5"} />)}
+        {photos.map((photo, index) => <ShowPhotoTile key={photo.id} photo={photo} onOpen={() => setPhotoId(photo.id)} eager={index === 0} className={index === photos.length - 1 && photos.length % 2 === 1 ? "sm:col-span-2 lg:col-span-12" : index % 4 === 0 || index % 4 === 3 ? "lg:col-span-7" : "lg:col-span-5"} />)}
       </div>}
       {!isLoading && !photos.length && <p className="py-12 text-muted-foreground">Nenhuma foto cadastrada.</p>}
 
@@ -86,9 +86,9 @@ export function ShowsGallery() {
   );
 }
 
-function ShowPhotoTile({ photo, onOpen, className = "" }: { photo: GalleryPhoto; onOpen: () => void; className?: string }) {
+function ShowPhotoTile({ photo, onOpen, eager = false, className = "" }: { photo: GalleryPhoto; onOpen: () => void; eager?: boolean; className?: string }) {
   return <Button variant="ghost" onClick={onOpen} aria-label={`Ampliar: ${photo.alt}`} className={`group relative block aspect-[4/5] h-auto w-full overflow-hidden rounded-sm bg-card p-0 hover:bg-card sm:aspect-[5/6] ${className}`}>
-    <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.03] group-hover:opacity-90 motion-reduce:transform-none" />
+    <img src={photo.src} alt={photo.alt} loading={eager ? "eager" : "lazy"} fetchPriority={eager ? "high" : "auto"} decoding="async" className="absolute inset-0 h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.03] group-hover:opacity-90 motion-reduce:transform-none" />
     <span className="absolute bottom-4 right-4 flex size-9 items-center justify-center rounded-full border border-foreground/30 bg-background/65 text-foreground transition-colors group-hover:border-primary group-hover:text-primary"><ArrowUpRight /></span>
   </Button>;
 }

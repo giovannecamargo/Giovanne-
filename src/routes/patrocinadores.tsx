@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SponsorsPage } from "@/components/site";
+import { SponsorsPage } from "@/components/sponsors";
 
 export const Route = createFileRoute("/patrocinadores")({
   head: () => ({

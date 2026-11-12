@@ -26,6 +26,9 @@ A sponsor may carry an optional destination address: when it has one, its logo o
 Sponsor panels keep a fixed size with the logo centered inside; the empty strips around the logo are painted with the logo's own edge color, sampled client-side by `edgeColor` (`src/lib/logo-bg.ts`) — guarded by `src/test/logo-bg.test.ts`. Never resize a panel to fit a logo.
 Every agenda show carries an access state (`public` = open to the public, `private` = closed event), set in the admin agenda form; the public agenda labels each card through `normalizeShowAccess` / `showAccessLabel` (`src/lib/show-access.ts`) — guarded by `src/test/show-access.test.ts`. Anything that is not explicitly `private` is treated as public.
 
+## Route performance
+Keep the site shell and each page's sections in separate modules so a route downloads only the code and media it uses; this prevents unrelated photo and video assets from slowing every page.
+
 ## Gallery presentation
 Keep the editorial gallery isolated from shared site sections so gallery layout changes cannot affect other pages. Read existing gallery photo records and bundled media without writing or duplicating records; interface filters and lightbox selection live only in React state. Only expose categories backed by available media; current gallery photos are live-show records and no backstage classification exists in the admin.
 Show videos (displayed on the Shows page, not the Gallery) are read exclusively from public.gallery_videos with admin-role write policies; uploaded video and cover files use private media storage and signed URLs. Legacy asset references are managed records, not a fallback, so deleting a video cannot make it reappear. Resolve each video/cover path independently to allow either file to be replaced without duplicating the unchanged media.

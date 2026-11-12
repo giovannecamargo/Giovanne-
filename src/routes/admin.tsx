@@ -3,7 +3,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Trash2, LogOut, Upload, Pencil, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { btnGold, btnOutline } from "@/components/site";
+import { btnGold, btnOutline } from "@/components/site-ui";
 import { formatShowDate, signedUrls } from "@/lib/content";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import { normalizeShowAccess, showAccessShortLabel, type ShowAccess } from "@/lib/show-access";

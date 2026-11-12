@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { useLocation } from "@tanstack/react-router";
-import { Header, Footer, RouteProgress } from "@/components/site";
+import { Header, Footer, RouteProgress } from "@/components/site-shell";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";

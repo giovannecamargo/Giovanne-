@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Hero, Highlights } from "@/components/site";
+import { Hero, Highlights } from "@/components/home";
+import heroAsset from "@/assets/giovanne-palco.webp.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
+    links: [{ rel: "preload", as: "image", href: heroAsset.url, fetchpriority: "high" }],
     meta: [
       { title: "Giovanne Camargo — Cantor Sertanejo | Shows e Eventos" },
       { name: "description", content: "Site oficial de Giovanne Camargo. Agenda de shows, fotos, vídeos e contratação para eventos." },

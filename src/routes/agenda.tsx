@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Agenda } from "@/components/site";
+import { Agenda } from "@/components/agenda-section";
 
 export const Route = createFileRoute("/agenda")({
   head: () => ({

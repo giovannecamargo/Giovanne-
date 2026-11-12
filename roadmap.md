@@ -7,3 +7,6 @@
 - [x] Integrar vídeos cadastrados à Galeria e preservar o vídeo existente.
 - [x] Testar cadastro, edição, reprodução e remoção com acesso administrativo.
 - [x] Adicionar a biografia oficial no menu Sobre, com as cinco partes do texto e os dados de origem, criação, base e carreira.
+- [x] Medir a velocidade das páginas e identificar os maiores atrasos (sem tráfego publicado; usar testes de computador e celular).
+- [x] Otimizar imagens, consultas e carregamento para computador e celular.
+- [x] Testar navegação, páginas e mídias após os ajustes de desempenho.

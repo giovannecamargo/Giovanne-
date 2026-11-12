@@ -1,7 +1,5 @@
-import palco from "@/assets/giovanne-palco.png.asset.json";
-import pb from "@/assets/giovanne-pb.png.asset.json";
-import videoGaleria01 from "@/assets/giovanne-galeria-01.mp4.asset.json";
-import videoGaleria01Capa from "@/assets/giovanne-galeria-01-capa.jpg.asset.json";
+import palco from "@/assets/giovanne-palco.webp.asset.json";
+import pb from "@/assets/giovanne-pb.webp.asset.json";
 
 // Número oficial ainda não fornecido — substituir quando recebido.
 export const WHATSAPP_NUMBER = "";
@@ -36,19 +34,9 @@ export const gallery = [
 // Adicione parceiros confirmados aqui: { name, logo }
 export const partners: { name: string; logo: string }[] = [];
 
-// Vídeos da galeria: "file" = arquivo publicado na CDN, "youtube" = ID do vídeo.
 export type GalleryVideo =
   | { kind: "file"; src: string; poster?: string; alt: string }
   | { kind: "youtube"; id: string; alt: string };
-
-export const videos: GalleryVideo[] = [
-  {
-    kind: "file",
-    src: videoGaleria01.url,
-    poster: videoGaleria01Capa.url,
-    alt: "Giovanne Camargo cantando ao vivo no Royal Lounge, de chapéu e violão",
-  },
-];
 
 export const nav = [
   { to: "/", label: "Início" },
