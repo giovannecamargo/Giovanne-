@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Shows, Partners, Lightbox } from "@/components/site";
+import { Partners } from "@/components/site";
+import { ShowsGallery } from "@/components/shows-gallery";
 
 export const Route = createFileRoute("/shows")({
   head: () => ({
@@ -17,6 +17,5 @@ export const Route = createFileRoute("/shows")({
 });
 
 function Page() {
-  const [img, setImg] = useState<string | null>(null);
-  return (<><Shows onOpen={setImg} /><Partners /><Lightbox src={img} onClose={() => setImg(null)} /></>);
+  return <><ShowsGallery /><Partners /></>;
 }

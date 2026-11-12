@@ -1,4 +1,3 @@
-import { useGalleryVideos } from "@/lib/gallery-videos";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import {
@@ -276,44 +275,6 @@ export function Agenda() {
         ))}
       </div>
     </section>
-  );
-}
-
-export function Shows({ onOpen }: { onOpen: (src: string) => void }) {
-  const { data } = usePhotos("shows");
-  const items = [...(data ?? []).map((p) => ({ src: p.src!, alt: p.alt || "Giovanne Camargo no palco" })), ...gallery];
-  const spans = ["md:col-span-2 md:row-span-2", "md:row-span-2"];
-  return (
-    <section className="mx-auto max-w-7xl px-5 pb-24 pt-32">
-      <SectionTitle eyebrow="Ao vivo" title="Shows e Apresentações" />
-      <div className="grid auto-rows-[220px] grid-cols-2 gap-3 md:grid-cols-3">
-        {items.map((g, i) => (
-          <button key={i} onClick={() => onOpen(g.src)} style={d(3 + Math.min(i, 6))} className={`reveal-img group relative overflow-hidden rounded-sm ${spans[i % spans.length]} col-span-1 row-span-2`}>
-            <img src={g.src} alt={g.alt} loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105" />
-          </button>
-        ))}
-      </div>
-      <ShowVideos />
-    </section>
-  );
-}
-
-function ShowVideos() {
-  const { data = [] } = useGalleryVideos();
-  const vids = data.filter((v) => v.src);
-  if (!vids.length) return null;
-  return (
-    <div className="mt-16">
-      <h2 className="mb-6 text-2xl font-bold">Vídeos ao vivo</h2>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {vids.map((v) => (
-          <figure key={v.id} className="overflow-hidden rounded-sm border border-border bg-card">
-            <video className="block aspect-[9/16] w-full bg-background object-contain" src={v.src} poster={v.poster || undefined} controls playsInline preload="none" aria-label={v.caption} />
-            <figcaption className="p-4 text-sm">{v.caption}</figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
   );
 }
 
