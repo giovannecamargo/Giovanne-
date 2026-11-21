@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_settings: {
+        Row: {
+          email: string
+          id: boolean
+          instagram_url: string
+          phone: string
+          updated_at: string
+          whatsapp: string
+        }
+        Insert: {
+          email?: string
+          id?: boolean
+          instagram_url?: string
+          phone?: string
+          updated_at?: string
+          whatsapp?: string
+        }
+        Update: {
+          email?: string
+          id?: boolean
+          instagram_url?: string
+          phone?: string
+          updated_at?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       gallery_videos: {
         Row: {
           caption: string

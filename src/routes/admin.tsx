@@ -9,6 +9,7 @@ import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import { normalizeShowAccess, showAccessShortLabel, type ShowAccess } from "@/lib/show-access";
 import type { Session } from "@supabase/supabase-js";
 import { AdminVideos } from "@/components/admin-videos";
+import { AdminContact } from "@/components/admin-contact";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin")({
@@ -121,8 +122,8 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Dashboard() {
-  const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "videos">("sponsors");
-  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"]] as const;
+  const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "contact">("sponsors");
+  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"], ["contact", "Contato"]] as const;
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-2">
@@ -135,6 +136,7 @@ function Dashboard() {
       {tab === "agenda" && <AgendaAdmin />}
       {tab === "shows" && <div className="space-y-12"><section><h2 className="mb-4 text-xl font-semibold">Fotos da página Shows</h2><PhotosAdmin section="shows" /></section><section><h2 className="mb-4 text-xl font-semibold">Vídeos da página Shows</h2><AdminVideos /></section></div>}
       {tab === "galeria" && <PhotosAdmin section="galeria" />}
+      {tab === "contact" && <AdminContact />}
     </div>
   );
 }

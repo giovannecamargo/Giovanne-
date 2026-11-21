@@ -1,13 +1,6 @@
 import palco from "@/assets/giovanne-palco.webp.asset.json";
 import pb from "@/assets/giovanne-pb.webp.asset.json";
 
-// Número oficial ainda não fornecido — substituir quando recebido.
-export const WHATSAPP_NUMBER = "";
-export const INSTAGRAM_URL = "https://instagram.com/";
-
-export const whatsappLink = (msg = "Olá! Gostaria de saber sobre a contratação de um show do Giovanne Camargo.") =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-
 export const photos = { palco: palco.url, pb: pb.url };
 
 export type ShowEvent = {

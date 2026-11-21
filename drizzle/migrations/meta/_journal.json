@@ -50,6 +50,13 @@
       "when": 1794088450239,
       "tag": "0006_gallery_video_mixed_media",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795276466740,
+      "tag": "0007_create_contact_settings",
+      "breakpoints": true
     }
   ]
 }

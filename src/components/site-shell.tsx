@@ -1,7 +1,9 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, MessageCircle, X } from "lucide-react";
-import { nav, whatsappLink } from "@/data/site";
+import { nav } from "@/data/site";
+import { whatsappLink } from "@/lib/contact-info";
+import { useContactInfo } from "@/lib/use-contact-info";
 import { btnGold, btnOutline, d } from "@/components/site-ui";
 import logoAsset from "@/assets/giovanne-logo.webp.asset.json";
 
@@ -25,6 +27,8 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
+  const { data: contact } = useContactInfo();
+  const hiringLink = whatsappLink(contact?.whatsapp);
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 20);
@@ -39,7 +43,7 @@ export function Header() {
         <Logo />
         <nav className="hidden items-center gap-6 lg:flex xl:gap-8">{nav.map((item) => <NavLink key={item.to} {...item} />)}</nav>
         <div className="flex items-center gap-3">
-          <a href={whatsappLink()} target="_blank" rel="noreferrer" className={`${btnOutline} hidden px-5 py-2 sm:inline-flex`}><MessageCircle className="h-4 w-4" /> Contratar</a>
+          {hiringLink ? <a href={hiringLink} target="_blank" rel="noreferrer" className={`${btnOutline} hidden px-5 py-2 sm:inline-flex`}><MessageCircle className="h-4 w-4" /> Contratar</a> : <Link to="/contato" className={`${btnOutline} hidden px-5 py-2 sm:inline-flex`}><MessageCircle className="h-4 w-4" /> Contratar</Link>}
           <button className="relative h-6 w-6 lg:hidden" onClick={() => setOpen(!open)} aria-label={open ? "Fechar menu" : "Abrir menu"} aria-expanded={open}>
             <Menu className={`absolute inset-0 transition duration-300 ${open ? "rotate-90 opacity-0" : "opacity-100"}`} />
             <X className={`absolute inset-0 transition duration-300 ${open ? "opacity-100" : "-rotate-90 opacity-0"}`} />
@@ -49,7 +53,7 @@ export function Header() {
       <div className={`mobile-menu grid lg:hidden ${open ? "grid-rows-[1fr] opacity-100" : "pointer-events-none grid-rows-[0fr] opacity-0"}`} aria-hidden={!open}>
         <nav className="overflow-hidden"><div className="border-t border-border bg-background px-5 pb-6">
           {nav.map((item, index) => <div key={item.to} className={`menu-item ${open ? "is-open" : ""}`} style={d(index)}><NavLink {...item} mobile onClick={() => setOpen(false)} /></div>)}
-          <a href={whatsappLink()} target="_blank" rel="noreferrer" className={`${btnGold} mt-5 w-full`}><MessageCircle className="h-4 w-4" /> Contratar</a>
+          {hiringLink ? <a href={hiringLink} target="_blank" rel="noreferrer" className={`${btnGold} mt-5 w-full`}><MessageCircle className="h-4 w-4" /> Contratar</a> : <Link to="/contato" onClick={() => setOpen(false)} className={`${btnGold} mt-5 w-full`}><MessageCircle className="h-4 w-4" /> Contratar</Link>}
         </div></nav>
       </div>
     </header>

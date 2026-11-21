@@ -1,0 +1,22 @@
+import { describe, expect, it } from "vitest";
+import { emailLink, normalizeContactInfo, phoneLink, whatsappLink } from "@/lib/contact-info";
+
+describe("Informações de contato", () => {
+  it("monta o WhatsApp com números formatados e código do país", () => {
+    expect(whatsappLink("+55 (16) 99999-8888", "Olá")).toBe("https://wa.me/5516999998888?text=Ol%C3%A1");
+  });
+
+  it("não cria um botão de WhatsApp para um número incompleto", () => {
+    expect(whatsappLink("99999-8888")).toBeNull();
+  });
+
+  it("monta links de e-mail e telefone válidos", () => {
+    expect(emailLink("contato@giovanne.com.br")).toBe("mailto:contato@giovanne.com.br");
+    expect(phoneLink("+55 (16) 3333-0000")).toBe("tel:+551633330000");
+  });
+
+  it("descarta endereços inválidos", () => {
+    expect(emailLink("contato@incompleto")).toBeNull();
+    expect(normalizeContactInfo({ email: "", phone: "", whatsapp: "", instagram_url: "javascript:alert(1)" }).instagramUrl).toBe("");
+  });
+});

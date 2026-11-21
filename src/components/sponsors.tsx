@@ -2,7 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, ExternalLink, MessageCircle, Plus } from "lucide-react";
 import { useActiveSponsors } from "@/lib/content";
 import { useLogoBg } from "@/lib/logo-bg";
-import { whatsappLink } from "@/data/site";
+import { whatsappLink } from "@/lib/contact-info";
+import { useContactInfo } from "@/lib/use-contact-info";
 import { btnGold, d } from "@/components/site-ui";
 
 export function Partners() {
@@ -39,6 +40,8 @@ function SponsorCard({ partner, index }: { partner: any; index: number }) {
 
 export function SponsorsPage() {
   const { data: partners = [], isLoading } = useActiveSponsors();
+  const { data: contact } = useContactInfo();
+  const sponsorshipLink = whatsappLink(contact?.whatsapp, "Olá! Gostaria de saber sobre patrocínio e parcerias com Giovanne Camargo.");
   return (
     <section className="mx-auto max-w-7xl px-5 pb-24 pt-32">
       <div className="mb-12"><p className="eyebrow reveal text-primary" style={d(0)}>Parcerias</p><h1 className="reveal mt-3 text-3xl font-bold sm:text-5xl" style={d(1)}>Patrocinadores e Parceiros</h1><div className="gold-rule mt-5 h-px w-16 bg-primary" style={d(2)} /></div>
@@ -46,7 +49,7 @@ export function SponsorsPage() {
       {isLoading ? <p className="reveal mt-14 text-muted-foreground" style={d(4)}>Carregando parceiros…</p> : !partners.length ? <p className="reveal mt-14 text-muted-foreground" style={d(4)}>Nenhum patrocinador ativo no momento. Que tal ser o primeiro? Fale com a gente pelo botão abaixo.</p> : <div className="mt-14 grid grid-cols-2 items-start gap-x-8 gap-y-12 md:grid-cols-3 lg:grid-cols-4">{partners.map((partner: any, index) => <SponsorCard key={partner.id ?? index} partner={partner} index={index} />)}</div>}
       <div className="reveal mt-16 flex flex-col items-start gap-6 rounded-sm border border-dashed border-primary/40 bg-card/40 p-8 sm:flex-row sm:items-center sm:justify-between" style={d(5)}>
         <div><h3 className="text-lg font-semibold">Sua marca ao lado de Giovanne Camargo</h3><p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">Patrocínios e parcerias garantem espaço de mídia em shows, redes sociais e no site oficial. Peça uma proposta sem compromisso.</p></div>
-        <a href={whatsappLink("Olá! Gostaria de saber sobre patrocínio e parcerias com Giovanne Camargo.")} target="_blank" rel="noreferrer" className={`${btnGold} shrink-0`}><MessageCircle className="h-4 w-4" /> Quero patrocinar</a>
+        {sponsorshipLink ? <a href={sponsorshipLink} target="_blank" rel="noreferrer" className={`${btnGold} shrink-0`}><MessageCircle className="h-4 w-4" /> Quero patrocinar</a> : <Link to="/contato" className={`${btnGold} shrink-0`}><MessageCircle className="h-4 w-4" /> Quero patrocinar</Link>}
       </div>
     </section>
   );

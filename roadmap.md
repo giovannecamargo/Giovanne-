@@ -10,3 +10,9 @@
 - [x] Medir a velocidade das páginas e identificar os maiores atrasos (sem tráfego publicado; usar testes de computador e celular).
 - [x] Otimizar imagens, consultas e carregamento para computador e celular.
 - [x] Testar navegação, páginas e mídias após os ajustes de desempenho.
+- [x] Medir novamente a abertura de todas as páginas no computador e no celular.
+- [x] Corrigir os gargalos de velocidade encontrados sem alterar o visual.
+- [x] Repetir as medições e validar a navegação e as mídias.
+- [x] Criar na administração um menu para editar e-mail, telefone, WhatsApp e Instagram.
+- [x] Ligar a página de contato e os botões do site às informações salvas.
+- [x] Testar a edição dos contatos e a exibição pública.

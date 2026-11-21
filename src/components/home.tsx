@@ -1,9 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CalendarDays, MessageCircle, Music2, PlayCircle, Users } from "lucide-react";
-import { photos, whatsappLink } from "@/data/site";
+import { photos } from "@/data/site";
+import { whatsappLink } from "@/lib/contact-info";
+import { useContactInfo } from "@/lib/use-contact-info";
 import { btnGold, btnOutline, d } from "@/components/site-ui";
 
 export function Hero() {
+  const { data: contact } = useContactInfo();
+  const hiringLink = whatsappLink(contact?.whatsapp);
   return (
     <section className="relative min-h-[100svh] overflow-hidden">
       <div className="absolute inset-0 bg-glow-warm" />
@@ -16,7 +20,7 @@ export function Hero() {
           <h1 className="reveal mt-5 text-5xl font-extrabold leading-[0.95] sm:text-7xl" style={d(2)}>GIOVANNE<br /><span className="text-gold-gradient">CAMARGO</span></h1>
           <p className="reveal mt-6 max-w-sm text-lg text-foreground/85" style={d(3)}>Música que conecta pessoas e transforma momentos em boas memórias.</p>
           <div className="reveal mt-8 flex flex-wrap gap-3" style={d(4)}>
-            <a href={whatsappLink()} target="_blank" rel="noreferrer" className={btnGold}><MessageCircle className="h-4 w-4" /> Contratar Show</a>
+            {hiringLink ? <a href={hiringLink} target="_blank" rel="noreferrer" className={btnGold}><MessageCircle className="h-4 w-4" /> Contratar Show</a> : <Link to="/contato" className={btnGold}><MessageCircle className="h-4 w-4" /> Contratar Show</Link>}
             <Link to="/agenda" className={btnOutline}>Ver Agenda</Link>
           </div>
         </div>
