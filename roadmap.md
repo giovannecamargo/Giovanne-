@@ -16,5 +16,5 @@
 - [x] Criar na administração um menu para editar e-mail, telefone, WhatsApp e Instagram.
 - [x] Ligar a página de contato e os botões do site às informações salvas.
 - [x] Testar a edição dos contatos e a exibição pública.
-- [ ] Remover marcas visíveis e menções removíveis à plataforma no código.
-- [ ] Ocultar o selo de edição e verificar que o site continua funcionando.
+- [x] Remover marcas visíveis e menções removíveis à plataforma no código.
+- [x] Ocultar o selo de edição e verificar que o site continua funcionando.
