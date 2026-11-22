@@ -43,3 +43,4 @@
 - [x] Adicionar moderação de avaliações na administração.
 - [x] Testar envio, aprovação, recusa, exclusão e exibição pública em computador e celular.
 - [x] Salvar a versão no GitHub.
+- [x] Atualizar GitHub e Vercel com a área administrativa e as avaliações, e publicar o domínio.
