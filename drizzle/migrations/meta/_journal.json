@@ -57,6 +57,13 @@
       "when": 1795276466740,
       "tag": "0007_create_contact_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795367447542,
+      "tag": "0008_tighten_public_read_rules",
+      "breakpoints": true
     }
   ]
 }
