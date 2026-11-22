@@ -467,10 +467,11 @@ function PhotosAdmin({ section }: { section: "shows" | "galeria" }) {
   const [msg, setMsg] = useState<string | null>(null);
   const refresh = () => { qc.invalidateQueries({ queryKey: key }); qc.invalidateQueries({ queryKey: ["photos", section] }); };
 
-  async function onFiles(files: FileList | null) {
-    if (!files?.length) return; setBusy(true); setMsg(null);
+  async function onFiles(fileList: FileList | null) {
+    const files = fileList ? Array.from(fileList) : [];
+    if (!files.length) return; setBusy(true); setMsg(null);
     try {
-      for (const f of Array.from(files)) {
+      for (const f of files) {
         const path = await uploadFile(f, section);
         const { error } = await supabase.from("photos").insert({ url: path, section });
         if (error) throw error;

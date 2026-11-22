@@ -34,3 +34,7 @@
 - [x] Criar cadastro de administrador por convite individual, com validade e uso único.
 - [x] Adicionar recuperação de senha por e-mail e página pública para definir a nova senha.
 - [x] Testar os fluxos de convite e recuperação e salvar a versão para GitHub e Vercel.
+- [x] Reproduzir e corrigir a ausência de patrocinadores ativos na página pública.
+- [x] Testar inclusão, edição, renovação e remoção de patrocinadores com registros temporários.
+- [x] Testar agenda, fotos, vídeos e contatos na administração e nas páginas públicas, limpando todos os registros temporários.
+- [x] Validar no celular a renovação de patrocinador vencido, executar testes finais e salvar a versão no GitHub.
