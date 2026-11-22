@@ -64,6 +64,13 @@
       "when": 1795367447542,
       "tag": "0008_tighten_public_read_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795371166723,
+      "tag": "0009_create_single_use_admin_invites",
+      "breakpoints": true
     }
   ]
 }

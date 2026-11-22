@@ -15,6 +15,7 @@ import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as PatrocinadoresRouteImport } from './routes/patrocinadores'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ShowsRouteImport } from './routes/shows'
 import { Route as SobreRouteImport } from './routes/sobre'
 
@@ -48,6 +49,11 @@ const PatrocinadoresRoute = PatrocinadoresRouteImport.update({
   path: '/patrocinadores',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShowsRoute = ShowsRouteImport.update({
   id: '/shows',
   path: '/shows',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/galeria': typeof GaleriaRoute
   '/patrocinadores': typeof PatrocinadoresRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/contato': typeof ContatoRoute
   '/galeria': typeof GaleriaRoute
   '/patrocinadores': typeof PatrocinadoresRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/galeria': typeof GaleriaRoute
   '/patrocinadores': typeof PatrocinadoresRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/galeria'
     | '/patrocinadores'
+    | '/reset-password'
     | '/shows'
     | '/sobre'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/galeria'
     | '/patrocinadores'
+    | '/reset-password'
     | '/shows'
     | '/sobre'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/galeria'
     | '/patrocinadores'
+    | '/reset-password'
     | '/shows'
     | '/sobre'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   ContatoRoute: typeof ContatoRoute
   GaleriaRoute: typeof GaleriaRoute
   PatrocinadoresRoute: typeof PatrocinadoresRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ShowsRoute: typeof ShowsRoute
   SobreRoute: typeof SobreRoute
 }
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatrocinadoresRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shows': {
       id: '/shows'
       path: '/shows'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContatoRoute: ContatoRoute,
   GaleriaRoute: GaleriaRoute,
   PatrocinadoresRoute: PatrocinadoresRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ShowsRoute: ShowsRoute,
   SobreRoute: SobreRoute,
 }

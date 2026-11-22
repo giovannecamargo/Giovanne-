@@ -30,5 +30,7 @@
 - [x] Salvar todas as alterações desta correção para atualização no GitHub.
 - [x] Revisar todas as exibições de imagens e impedir novos envios WebP de fotos, logos e capas; preservar os cadastros existentes.
 - [x] Criar o novo usuário e conceder acesso de administrador sem salvar a senha no código.
-- [ ] Testar o primeiro acesso à administração após o usuário confirmar o e-mail.
-- [x] Salvar a versão para sincronização com GitHub e Vercel.
+- [x] Retirar o acesso administrativo da conta criada na etapa anterior, sem afetar outros administradores.
+- [ ] Criar cadastro de administrador por convite individual, com validade e uso único.
+- [ ] Adicionar recuperação de senha por e-mail e página pública para definir a nova senha.
+- [ ] Testar os fluxos de convite e recuperação e salvar a versão para GitHub e Vercel.

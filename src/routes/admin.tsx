@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Trash2, LogOut, Upload, Pencil, RefreshCw } from "lucide-react";
@@ -12,8 +12,12 @@ import { AdminVideos } from "@/components/admin-videos";
 import { AdminContact } from "@/components/admin-contact";
 import { Button } from "@/components/ui/button";
 import { validateCompatibleImage } from "@/lib/image-upload";
+import { adminConfirmationUrl, passwordResetUrl, shouldShowAdminSignup } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin")({
+  validateSearch: (search): { convite: string } => ({
+    convite: typeof search["convite"] === "string" ? search["convite"] : "",
+  }),
   head: () => ({
     meta: [
       { title: "Administração — Giovanne Camargo" },
@@ -40,7 +44,13 @@ async function uploadFile(file: File, folder: string) {
 }
 
 function AdminPage() {
+  const { convite } = Route.useSearch();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [session, setSession] = useState<Session | null | undefined>(undefined);
+  const [inviteError, setInviteError] = useState<string | null>(null);
+  const userId = session?.user.id;
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
@@ -48,13 +58,29 @@ function AdminPage() {
   }, []);
 
   const { data: isAdmin, isLoading } = useQuery({
-    queryKey: ["is-admin", session?.user.id],
-    enabled: !!session,
+    queryKey: ["is-admin", userId],
+    enabled: !!userId,
     queryFn: async () => {
-      const { data } = await supabase.rpc("has_role", { _user_id: session!.user.id, _role: "admin" });
+      const { data } = await supabase.rpc("has_role", { _user_id: userId!, _role: "admin" });
       return !!data;
     },
   });
+
+  useEffect(() => {
+    if (!userId || !convite || isAdmin !== false) return;
+    let active = true;
+    setInviteError(null);
+    void supabase.rpc("consume_admin_invite", { invite_token: convite, invited_user_id: userId }).then(({ error }) => {
+      if (!active) return;
+      if (error) {
+        setInviteError("Este convite é inválido, expirou ou já foi utilizado.");
+        return;
+      }
+      void queryClient.invalidateQueries({ queryKey: ["is-admin", userId] });
+      void navigate({ to: "/admin", search: { convite: "" }, replace: true });
+    });
+    return () => { active = false; };
+  }, [convite, isAdmin, navigate, queryClient, userId]);
 
   return (
     <section className="mx-auto max-w-5xl px-5 pb-24 pt-32">
@@ -62,29 +88,30 @@ function AdminPage() {
       <div className="mt-2 h-px w-16 bg-primary" />
       <div className="mt-10">
         {session === undefined || (session && isLoading) ? <p className="text-muted-foreground">Carregando…</p>
-          : !session ? <Login />
-          : !isAdmin ? <NoAccess />
+          : !session ? <Login invite={convite} />
+          : !isAdmin ? <NoAccess message={inviteError} />
           : <Dashboard />}
       </div>
     </section>
   );
 }
 
-function NoAccess() {
+function NoAccess({ message }: { message: string | null }) {
   return (
     <div>
-      <p className="text-muted-foreground">Esta conta não tem acesso de administrador.</p>
+      <p className="text-muted-foreground">{message ?? "Esta conta não tem acesso de administrador."}</p>
       <button className={`${btnOutline} mt-4`} onClick={() => supabase.auth.signOut()}>Sair</button>
     </div>
   );
 }
 
-function Login() {
+function Login({ invite }: { invite: string }) {
   const { data: hasAdmin } = useQuery({
     queryKey: ["admin-exists"],
     queryFn: async () => (await supabase.rpc("admin_exists")).data ?? true,
   });
-  const signup = hasAdmin === false;
+  const signup = shouldShowAdminSignup(hasAdmin, invite);
+  const [forgot, setForgot] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
@@ -92,10 +119,19 @@ function Login() {
 
   async function submit(e: FormEvent) {
     e.preventDefault(); setBusy(true); setMsg(null);
-    if (signup) {
-      const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/admin` } });
-      if (error) setMsg(error.message);
-      else if (!data.session) setMsg("Conta criada! Confirme pelo link enviado ao seu e-mail e depois entre aqui.");
+    if (forgot) {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: passwordResetUrl(window.location.origin),
+      });
+      setMsg(error ? "Não foi possível enviar a recuperação. Tente novamente." : "Se o e-mail estiver cadastrado, você receberá o link para criar uma nova senha.");
+    } else if (signup) {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: adminConfirmationUrl(window.location.origin, invite) },
+      });
+      if (error) setMsg("Não foi possível criar a conta. Confira os dados e tente novamente.");
+      else if (!data.session) setMsg("Conta criada! Confirme pelo link enviado ao seu e-mail para liberar o acesso.");
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setMsg("E-mail ou senha incorretos.");
@@ -103,13 +139,20 @@ function Login() {
     setBusy(false);
   }
 
+  const title = forgot ? "Informe seu e-mail para receber o link de recuperação."
+    : signup ? invite ? "Use o convite recebido para criar sua conta de administrador." : "Crie a primeira conta de administrador."
+    : "Entre com sua conta de administrador.";
+
   return (
     <form onSubmit={submit} className="max-w-sm space-y-4">
-      <p className="text-sm text-muted-foreground">{signup ? "Crie a conta do administrador (só pode existir uma)." : "Entre com sua conta de administrador."}</p>
-      <input className={input} type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <input className={input} type="password" placeholder="Senha" minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} required />
-      {msg && <p className="text-sm text-primary">{msg}</p>}
-      <button className={`${btnGold} w-full`} disabled={busy}>{signup ? "Criar conta" : "Entrar"}</button>
+      <p className="text-sm text-muted-foreground">{title}</p>
+      <input className={input} type="email" autoComplete="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
+      {!forgot && <input className={input} type="password" autoComplete={signup ? "new-password" : "current-password"} placeholder="Senha" minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} required />}
+      {msg && <p className="text-sm text-primary" role="status">{msg}</p>}
+      <button className={`${btnGold} w-full`} disabled={busy}>{busy ? "Aguarde…" : forgot ? "Enviar recuperação" : signup ? "Criar conta" : "Entrar"}</button>
+      {!signup && <button type="button" className="text-sm text-muted-foreground underline underline-offset-4 hover:text-primary" onClick={() => { setForgot(!forgot); setMsg(null); }}>
+        {forgot ? "Voltar para o login" : "Esqueci minha senha"}
+      </button>}
     </form>
   );
 }
