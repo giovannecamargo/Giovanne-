@@ -45,6 +45,6 @@
 - [x] Salvar a versão no GitHub.
 - [x] Atualizar GitHub e Vercel com a área administrativa e as avaliações, e publicar o domínio.
 
-- [x] Criar a landing comercial /contratar-show com pacotes e configurações vindos do painel.
-- [x] Adicionar a aba "Contratação de Shows" no /admin e esconder o menu institucional na landing e no painel.
-- [x] Importar pacotes, condições e mensagens da landing original para o painel (WhatsApp real pendente).
+- [ ] Remover a landing /contratar-show e sua aba administrativa.
+- [ ] Excluir pacotes e configurações comerciais, preservando o backup.
+- [ ] Verificar o site institucional e salvar o cancelamento no GitHub.

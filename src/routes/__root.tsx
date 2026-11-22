@@ -11,7 +11,6 @@ import {
 import { type ReactNode } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { Header, Footer, RouteProgress } from "@/components/site-shell";
-import { usesInstitutionalChrome } from "@/lib/site-chrome";
 
 import appCss from "../styles.css?url";
 
@@ -131,7 +130,7 @@ function RootComponent() {
 
 function SiteChrome() {
   const { pathname } = useLocation();
-  if (!usesInstitutionalChrome(pathname)) return <div key={pathname} className="page-enter"><Outlet /></div>;
+  if (/^\/admin(\/|$)/.test(pathname)) return <div key={pathname} className="page-enter"><Outlet /></div>;
   return (<><Header /><RouteProgress /><PageFrame /></>);
 }
 

@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ContatoRouteImport } from './routes/contato'
-import { Route as ContratarShowRouteImport } from './routes/contratar-show'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as PatrocinadoresRouteImport } from './routes/patrocinadores'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -38,11 +37,6 @@ const AgendaRoute = AgendaRouteImport.update({
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContratarShowRoute = ContratarShowRouteImport.update({
-  id: '/contratar-show',
-  path: '/contratar-show',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GaleriaRoute = GaleriaRouteImport.update({
@@ -76,7 +70,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/agenda': typeof AgendaRoute
   '/contato': typeof ContatoRoute
-  '/contratar-show': typeof ContratarShowRoute
   '/galeria': typeof GaleriaRoute
   '/patrocinadores': typeof PatrocinadoresRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -88,7 +81,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/agenda': typeof AgendaRoute
   '/contato': typeof ContatoRoute
-  '/contratar-show': typeof ContratarShowRoute
   '/galeria': typeof GaleriaRoute
   '/patrocinadores': typeof PatrocinadoresRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -101,7 +93,6 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/agenda': typeof AgendaRoute
   '/contato': typeof ContatoRoute
-  '/contratar-show': typeof ContratarShowRoute
   '/galeria': typeof GaleriaRoute
   '/patrocinadores': typeof PatrocinadoresRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -115,7 +106,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agenda'
     | '/contato'
-    | '/contratar-show'
     | '/galeria'
     | '/patrocinadores'
     | '/reset-password'
@@ -127,7 +117,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agenda'
     | '/contato'
-    | '/contratar-show'
     | '/galeria'
     | '/patrocinadores'
     | '/reset-password'
@@ -139,7 +128,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agenda'
     | '/contato'
-    | '/contratar-show'
     | '/galeria'
     | '/patrocinadores'
     | '/reset-password'
@@ -152,7 +140,6 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AgendaRoute: typeof AgendaRoute
   ContatoRoute: typeof ContatoRoute
-  ContratarShowRoute: typeof ContratarShowRoute
   GaleriaRoute: typeof GaleriaRoute
   PatrocinadoresRoute: typeof PatrocinadoresRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -188,13 +175,6 @@ declare module '@tanstack/react-router' {
       path: '/contato'
       fullPath: '/contato'
       preLoaderRoute: typeof ContatoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contratar-show': {
-      id: '/contratar-show'
-      path: '/contratar-show'
-      fullPath: '/contratar-show'
-      preLoaderRoute: typeof ContratarShowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galeria': {
@@ -240,7 +220,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AgendaRoute: AgendaRoute,
   ContatoRoute: ContatoRoute,
-  ContratarShowRoute: ContratarShowRoute,
   GaleriaRoute: GaleriaRoute,
   PatrocinadoresRoute: PatrocinadoresRoute,
   ResetPasswordRoute: ResetPasswordRoute,

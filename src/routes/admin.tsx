@@ -11,7 +11,6 @@ import type { Session } from "@supabase/supabase-js";
 import { AdminVideos } from "@/components/admin-videos";
 import { AdminContact } from "@/components/admin-contact";
 import { AdminReviews } from "@/components/admin-reviews";
-import { AdminHiring } from "@/components/admin-hiring";
 import { Button } from "@/components/ui/button";
 import { validateCompatibleImage } from "@/lib/image-upload";
 import { adminConfirmationUrl, passwordResetUrl, shouldShowAdminSignup } from "@/lib/admin-auth";
@@ -169,8 +168,8 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Dashboard() {
-  const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "reviews" | "contact" | "hiring">("sponsors");
-  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"], ["reviews", "Avaliações"], ["contact", "Contato"], ["hiring", "Contratação de Shows"]] as const;
+  const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "reviews" | "contact">("sponsors");
+  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"], ["reviews", "Avaliações"], ["contact", "Contato"]] as const;
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-2">
@@ -185,7 +184,6 @@ function Dashboard() {
       {tab === "galeria" && <PhotosAdmin section="galeria" />}
       {tab === "reviews" && <AdminReviews />}
       {tab === "contact" && <AdminContact />}
-      {tab === "hiring" && <AdminHiring />}
     </div>
   );
 }
