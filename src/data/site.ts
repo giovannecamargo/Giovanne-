@@ -1,7 +1,6 @@
-import palco from "@/assets/giovanne-palco.jpg.asset.json";
-import pb from "@/assets/giovanne-pb.jpg.asset.json";
-
-export const photos = { palco: palco.url, pb: pb.url };
+// Fixed media is served from public/ so it also works on external hosts.
+export const brandLogo = "/images/giovanne-logo.png";
+export const photos = { palco: "/images/giovanne-palco.jpg", pb: "/images/giovanne-pb.jpg" };
 
 export type ShowEvent = {
   day: string;
@@ -20,8 +19,8 @@ export const events: ShowEvent[] = [
 ];
 
 export const gallery = [
-  { src: palco.url, alt: "Giovanne Camargo cantando com violão no palco" },
-  { src: pb.url, alt: "Giovanne Camargo em apresentação, foto em preto e branco" },
+  { src: photos.palco, alt: "Giovanne Camargo cantando com violão no palco" },
+  { src: photos.pb, alt: "Giovanne Camargo em apresentação, foto em preto e branco" },
 ];
 
 // Adicione parceiros confirmados aqui: { name, logo }

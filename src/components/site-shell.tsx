@@ -1,16 +1,15 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, MessageCircle, X } from "lucide-react";
-import { nav } from "@/data/site";
+import { brandLogo, nav } from "@/data/site";
 import { whatsappLink } from "@/lib/contact-info";
 import { useContactInfo } from "@/lib/use-contact-info";
 import { btnGold, btnOutline, d } from "@/components/site-ui";
-import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
 export function Logo() {
   return (
     <Link to="/" className="block w-[170px] shrink-0 sm:w-[190px]" aria-label="Giovanne Camargo — início">
-      <img src={logoAsset.url} alt="Giovanne Camargo" width={1110} height={380} className="block h-auto w-full object-contain" />
+      <img src={brandLogo} alt="Giovanne Camargo" width={1110} height={380} className="block h-auto w-full object-contain" />
     </Link>
   );
 }

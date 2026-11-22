@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { About, Testimonials } from "@/components/about";
-import aboutAsset from "@/assets/giovanne-pb.jpg.asset.json";
+import { photos } from "@/data/site";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
-    links: [{ rel: "preload", as: "image", href: aboutAsset.url, fetchpriority: "high" }],
+    links: [{ rel: "preload", as: "image", href: photos.pb, fetchPriority: "high" }],
     meta: [
       { title: "Sobre — Giovanne Camargo" },
       { name: "description", content: "Conheça a trajetória de Giovanne Camargo: as raízes no sertanejo, 12 anos de estrada, referências musicais e a conexão com o público." },

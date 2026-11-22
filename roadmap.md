@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Corrigir logo, fotos fixas e favicon na Vercel usando arquivos servidos pelo próprio site.
+- [x] Testar as páginas sem acesso aos endereços internos de mídia e salvar a correção no GitHub.
+
 - [x] Patrocinadores: manter o painel no tamanho de antes e preencher as laterais vazias com a cor de fundo da própria logo (sem barras brancas).
 - [x] Renovar apenas a Galeria: destaque 60/40, fotos grandes, filtros por conteúdo, player e lightbox navegável; preservar mídias e administração existente.
 - [x] Verificar filtros, reprodução e navegação de fotos no computador e celular.
