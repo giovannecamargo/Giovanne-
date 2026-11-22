@@ -19,3 +19,5 @@
 - [x] Remover marcas visíveis e menções removíveis à plataforma no código.
 - [x] Ocultar o selo de edição e verificar que o site continua funcionando.
 - [x] Conferir todas as fotos, logotipos e capas de vídeos nas páginas públicas e na administração, no computador e no celular.
+- [x] Restaurar o logo e as fotos principais com formatos compatíveis, sem depender de WebP.
+- [x] Salvar todas as alterações desta correção para atualização no GitHub.

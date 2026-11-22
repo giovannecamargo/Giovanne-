@@ -1,5 +1,5 @@
-import palco from "@/assets/giovanne-palco.webp.asset.json";
-import pb from "@/assets/giovanne-pb.webp.asset.json";
+import palco from "@/assets/giovanne-palco.jpg.asset.json";
+import pb from "@/assets/giovanne-pb.jpg.asset.json";
 
 export const photos = { palco: palco.url, pb: pb.url };
 

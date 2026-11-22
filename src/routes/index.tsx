@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Hero, Highlights } from "@/components/home";
-import heroAsset from "@/assets/giovanne-palco.webp.asset.json";
+import heroAsset from "@/assets/giovanne-palco.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({

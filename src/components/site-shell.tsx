@@ -5,7 +5,7 @@ import { nav } from "@/data/site";
 import { whatsappLink } from "@/lib/contact-info";
 import { useContactInfo } from "@/lib/use-contact-info";
 import { btnGold, btnOutline, d } from "@/components/site-ui";
-import logoAsset from "@/assets/giovanne-logo.webp.asset.json";
+import logoAsset from "@/assets/giovanne-logo.png.asset.json";
 
 export function Logo() {
   return (

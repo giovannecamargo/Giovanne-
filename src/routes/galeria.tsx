@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { EditorialGallery } from "@/components/editorial-gallery";
-import galleryAsset from "@/assets/giovanne-palco.webp.asset.json";
+import galleryAsset from "@/assets/giovanne-palco.jpg.asset.json";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
