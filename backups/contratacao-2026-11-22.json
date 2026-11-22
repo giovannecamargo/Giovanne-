@@ -1,0 +1,9 @@
+{
+  "note": "Backup dos dados de contratação antes de importar da landing original (22/11/2026).",
+  "show_packages": [
+    {"order_index":1,"code":"P01","title":"Pacote P01","price":700,"duration":"","formation":"","sound_included":false,"description":"","is_highlighted":false,"is_active":true},
+    {"order_index":2,"code":"P02","title":"Pacote P02","price":1000,"duration":"","formation":"","sound_included":false,"description":"","is_highlighted":false,"is_active":true},
+    {"order_index":3,"code":"P03","title":"Pacote P03","price":1200,"duration":"","formation":"","sound_included":false,"description":"","is_highlighted":false,"is_active":true}
+  ],
+  "hiring_settings": {"whatsapp_number":"","deposit_percentage":0,"valid_cities":"","contract_terms_text":""}
+}

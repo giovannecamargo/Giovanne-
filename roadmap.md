@@ -47,3 +47,4 @@
 
 - [x] Criar a landing comercial /contratar-show com pacotes e configurações vindos do painel.
 - [x] Adicionar a aba "Contratação de Shows" no /admin e esconder o menu institucional na landing e no painel.
+- [x] Importar pacotes, condições e mensagens da landing original para o painel (WhatsApp real pendente).

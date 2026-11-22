@@ -99,6 +99,7 @@ export type Database = {
         Row: {
           contract_terms_text: string
           deposit_percentage: number
+          general_whatsapp_message: string
           id: boolean
           updated_at: string
           valid_cities: string
@@ -107,6 +108,7 @@ export type Database = {
         Insert: {
           contract_terms_text?: string
           deposit_percentage?: number
+          general_whatsapp_message?: string
           id?: boolean
           updated_at?: string
           valid_cities?: string
@@ -115,6 +117,7 @@ export type Database = {
         Update: {
           contract_terms_text?: string
           deposit_percentage?: number
+          general_whatsapp_message?: string
           id?: boolean
           updated_at?: string
           valid_cities?: string
@@ -193,6 +196,7 @@ export type Database = {
           price: number
           sound_included: boolean
           title: string
+          whatsapp_message: string
         }
         Insert: {
           code?: string
@@ -207,6 +211,7 @@ export type Database = {
           price?: number
           sound_included?: boolean
           title?: string
+          whatsapp_message?: string
         }
         Update: {
           code?: string
@@ -221,6 +226,7 @@ export type Database = {
           price?: number
           sound_included?: boolean
           title?: string
+          whatsapp_message?: string
         }
         Relationships: []
       }

@@ -26,3 +26,14 @@ describe("contratação de shows", () => {
     expect(usesInstitutionalChrome("/sobre")).toBe(true);
   });
 });
+
+describe("mensagens de WhatsApp cadastradas", () => {
+  it("usa a mensagem própria do pacote quando existe", () => {
+    const link = packageWhatsappLink("5519988887777", { code: "P01", title: "Ambiente + Show", whatsapp_message: "Tenho interesse no Pacote 01" });
+    expect(decodeURIComponent(link ?? "")).toContain("Tenho interesse no Pacote 01");
+  });
+  it("usa a mensagem geral nos botões gerais", () => {
+    const link = packageWhatsappLink("5519988887777", undefined, "Consultar disponibilidade");
+    expect(decodeURIComponent(link ?? "")).toContain("Consultar disponibilidade");
+  });
+});

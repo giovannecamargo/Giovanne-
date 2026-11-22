@@ -7,7 +7,7 @@ import { clampDeposit, emptyHiringSettings, formatBRL, type HiringSettings, type
 
 const input = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm";
 type Draft = Omit<ShowPackage, "id">;
-const blank: Draft = { order_index: 0, code: "", title: "", duration: "", formation: "", price: 0, sound_included: false, description: "", is_highlighted: false, is_active: true };
+const blank: Draft = { order_index: 0, code: "", title: "", duration: "", formation: "", price: 0, sound_included: false, description: "", is_highlighted: false, is_active: true, whatsapp_message: "" };
 
 export function AdminHiring() {
   return <div className="space-y-12"><Packages /><Settings /></div>;
@@ -62,6 +62,7 @@ function Packages() {
         <input className={input} placeholder="Duração (ex.: 2 horas)" value={draft.duration} onChange={(e) => set("duration", e.target.value)} />
         <input className={`${input} sm:col-span-2`} placeholder="Formação musical" value={draft.formation} onChange={(e) => set("formation", e.target.value)} />
         <textarea className={`${input} sm:col-span-2`} rows={3} placeholder="Descrição" value={draft.description} onChange={(e) => set("description", e.target.value)} />
+        <textarea className={`${input} sm:col-span-2`} rows={2} placeholder="Mensagem de WhatsApp deste pacote" value={draft.whatsapp_message} onChange={(e) => set("whatsapp_message", e.target.value)} />
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={draft.sound_included} onChange={(e) => set("sound_included", e.target.checked)} />Sonorização inclusa</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={draft.is_highlighted} onChange={(e) => set("is_highlighted", e.target.checked)} />Destacar</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={draft.is_active} onChange={(e) => set("is_active", e.target.checked)} />Ativo no site</label>
@@ -98,7 +99,7 @@ function Settings() {
   const { data } = useQuery({
     queryKey: ["hiring-settings"],
     queryFn: async (): Promise<HiringSettings> => {
-      const { data, error } = await supabase.from("hiring_settings").select("whatsapp_number, deposit_percentage, valid_cities, contract_terms_text").eq("id", true).maybeSingle();
+      const { data, error } = await supabase.from("hiring_settings").select("whatsapp_number, deposit_percentage, valid_cities, contract_terms_text, general_whatsapp_message").eq("id", true).maybeSingle();
       if (error) throw error;
       return data ?? emptyHiringSettings;
     },
@@ -118,6 +119,7 @@ function Settings() {
       <h2 className="mb-4 text-xl font-semibold">Configurações de contratação</h2>
       <form onSubmit={save} className="grid gap-3 rounded-sm border border-border bg-card/40 p-5">
         <label className="text-sm">WhatsApp de atendimento (com DDD)<input className={`${input} mt-1`} inputMode="tel" value={form.whatsapp_number} onChange={(e) => setForm({ ...form, whatsapp_number: e.target.value })} placeholder="5511999999999" /></label>
+        <label className="text-sm">Mensagem geral de WhatsApp<textarea className={`${input} mt-1`} rows={2} value={form.general_whatsapp_message} onChange={(e) => setForm({ ...form, general_whatsapp_message: e.target.value })} /></label>
         <label className="text-sm">Sinal para reserva (%)<input className={`${input} mt-1`} type="number" min={0} max={100} value={form.deposit_percentage} onChange={(e) => setForm({ ...form, deposit_percentage: Number(e.target.value) })} /></label>
         <label className="text-sm">Cidades atendidas (separe por vírgula)<input className={`${input} mt-1`} value={form.valid_cities} onChange={(e) => setForm({ ...form, valid_cities: e.target.value })} /></label>
         <label className="text-sm">Condições de contratação<textarea className={`${input} mt-1`} rows={5} value={form.contract_terms_text} onChange={(e) => setForm({ ...form, contract_terms_text: e.target.value })} /></label>

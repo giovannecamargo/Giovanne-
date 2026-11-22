@@ -17,7 +17,7 @@ export function useHiringSettings() {
   return useQuery({
     queryKey: ["hiring-settings"],
     queryFn: async (): Promise<HiringSettings> => {
-      const { data, error } = await supabase.from("hiring_settings").select("whatsapp_number, deposit_percentage, valid_cities, contract_terms_text").eq("id", true).maybeSingle();
+      const { data, error } = await supabase.from("hiring_settings").select("whatsapp_number, deposit_percentage, valid_cities, contract_terms_text, general_whatsapp_message").eq("id", true).maybeSingle();
       if (error) throw error;
       return data ?? emptyHiringSettings;
     },

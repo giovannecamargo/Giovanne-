@@ -32,7 +32,7 @@ export function HiringLanding() {
   const { data: packages = [] } = usePublicPackages();
   const { data: settings } = useHiringSettings();
   const whats = settings?.whatsapp_number ?? "";
-  const general = packageWhatsappLink(whats);
+  const general = packageWhatsappLink(whats, undefined, settings?.general_whatsapp_message);
   const cities = (settings?.valid_cities ?? "").split(/[\n,;]+/).map((c) => c.trim()).filter(Boolean);
   const deposit = settings?.deposit_percentage ?? 0;
   const terms = settings?.contract_terms_text?.trim() ?? "";
