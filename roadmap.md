@@ -21,3 +21,4 @@
 - [x] Conferir todas as fotos, logotipos e capas de vídeos nas páginas públicas e na administração, no computador e no celular.
 - [x] Restaurar o logo e as fotos principais com formatos compatíveis, sem depender de WebP.
 - [x] Salvar todas as alterações desta correção para atualização no GitHub.
+- [x] Revisar todas as exibições de imagens e impedir novos envios WebP de fotos, logos e capas; preservar os cadastros existentes.

@@ -11,6 +11,7 @@ import type { Session } from "@supabase/supabase-js";
 import { AdminVideos } from "@/components/admin-videos";
 import { AdminContact } from "@/components/admin-contact";
 import { Button } from "@/components/ui/button";
+import { validateCompatibleImage } from "@/lib/image-upload";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -30,7 +31,8 @@ export const Route = createFileRoute("/admin")({
 const input = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none";
 
 async function uploadFile(file: File, folder: string) {
-  const ext = file.name.split(".").pop() || "jpg";
+  validateCompatibleImage(file);
+  const ext = file.type === "image/png" ? "png" : "jpg";
   const path = `${folder}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from("media").upload(path, file, { contentType: file.type });
   if (error) throw error;
@@ -235,7 +237,7 @@ function Sponsors() {
       <Panel title="Adicionar patrocinador">
         <form onSubmit={add} className="grid gap-4 sm:grid-cols-2">
           <label className="text-sm sm:col-span-2">Nome<input className={`${input} mt-1`} value={name} onChange={(e) => setName(e.target.value)} required /></label>
-          <label className="text-sm sm:col-span-2">Logo<input className={`${input} mt-1`} type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} required /></label>
+          <label className="text-sm sm:col-span-2">Logo<input className={`${input} mt-1`} type="file" accept="image/jpeg,image/png" onChange={(e) => setFile(e.target.files?.[0] ?? null)} required /></label>
           <label className="text-sm sm:col-span-2">
             Site do patrocinador (opcional)
             <input className={`${input} mt-1`} type="text" inputMode="url" placeholder="https://www.instagram.com/patrocinador" value={link} onChange={(e) => setLink(e.target.value)} />
@@ -444,7 +446,7 @@ function PhotosAdmin({ section }: { section: "shows" | "galeria" }) {
     <Panel title={section === "shows" ? "Fotos da página Shows" : "Fotos da página Galeria"}>
       <label className={`${btnGold} cursor-pointer`}>
         <Upload className="h-4 w-4" />{busy ? "Enviando…" : "Adicionar fotos"}
-        <input type="file" accept="image/*" multiple className="hidden" disabled={busy} onChange={(e) => { onFiles(e.target.files); e.target.value = ""; }} />
+        <input type="file" accept="image/jpeg,image/png" multiple className="hidden" disabled={busy} onChange={(e) => { onFiles(e.target.files); e.target.value = ""; }} />
       </label>
       {msg && <p className="mt-3 text-sm text-primary">{msg}</p>}
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">

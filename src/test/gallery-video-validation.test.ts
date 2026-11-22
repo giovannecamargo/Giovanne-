@@ -14,4 +14,8 @@ describe("Gallery video registration", () => {
     expect(() => validateGalleryFile({ type: "video/mp4", size: 100 }, "cover")).toThrow();
     expect(() => validateGalleryFile({ type: "image/jpeg", size: 100 }, "cover")).not.toThrow();
   });
+  it("rejects a WebP cover so it remains visible on incompatible devices", () => {
+    expect(() => validateGalleryFile({ type: "image/webp", size: 100 }, "cover")).toThrow("JPG ou PNG");
+    expect(() => validateGalleryFile({ type: "image/png", size: 100 }, "cover")).not.toThrow();
+  });
 });
