@@ -45,6 +45,7 @@
 - [x] Salvar a versão no GitHub.
 - [x] Atualizar GitHub e Vercel com a área administrativa e as avaliações, e publicar o domínio.
 
-- [ ] Remover a landing /contratar-show e sua aba administrativa.
-- [ ] Excluir pacotes e configurações comerciais, preservando o backup.
-- [ ] Verificar o site institucional e salvar o cancelamento no GitHub.
+- [x] Remover a landing /contratar-show e sua aba administrativa.
+- [x] Apagar e desativar pacotes e configurações comerciais, preservando o backup.
+- [x] Verificar o site institucional e salvar o cancelamento no GitHub.
+- [ ] Excluir as duas estruturas comerciais vazias — aguarda a permissão de mudanças incompatíveis do banco.

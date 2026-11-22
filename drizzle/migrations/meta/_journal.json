@@ -99,6 +99,13 @@
       "when": 1795378356827,
       "tag": "0013_add_hiring_whatsapp_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1795380609746,
+      "tag": "0014_retire_show_hiring",
+      "breakpoints": true
     }
   ]
 }
