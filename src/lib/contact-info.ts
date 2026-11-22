@@ -16,12 +16,31 @@ export type ContactInfoRecord = {
 
 export const emptyContactInfo: ContactInfo = { email: "", phone: "", whatsapp: "", instagramUrl: "" };
 
+export function instagramLink(raw: string | null | undefined): string | null {
+  const value = (raw ?? "").trim();
+  if (!value) return null;
+  const handlePattern = /^[A-Za-z0-9._]{1,30}$/;
+  const typedHandle = value.replace(/^@/, "");
+  if (handlePattern.test(typedHandle)) return `https://www.instagram.com/${typedHandle}/`;
+
+  const normalized = normalizeSponsorLink(value);
+  if (!normalized) return null;
+  try {
+    const url = new URL(normalized);
+    if (url.hostname.toLowerCase().replace(/^www\./, "") !== "instagram.com") return null;
+    const handle = url.pathname.split("/").filter(Boolean)[0] ?? "";
+    return handlePattern.test(handle) ? `https://www.instagram.com/${handle}/` : null;
+  } catch {
+    return null;
+  }
+}
+
 export function normalizeContactInfo(record: ContactInfoRecord | null | undefined): ContactInfo {
   return {
     email: record?.email.trim() ?? "",
     phone: record?.phone.trim() ?? "",
     whatsapp: record?.whatsapp.trim() ?? "",
-    instagramUrl: normalizeSponsorLink(record?.instagram_url) ?? "",
+    instagramUrl: instagramLink(record?.instagram_url) ?? "",
   };
 }
 

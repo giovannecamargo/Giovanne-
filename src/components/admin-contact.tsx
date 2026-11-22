@@ -1,8 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { emailLink, phoneLink, whatsappLink } from "@/lib/contact-info";
-import { normalizeSponsorLink } from "@/lib/sponsor-link";
+import { emailLink, instagramLink, phoneLink, whatsappLink } from "@/lib/contact-info";
 import { btnGold } from "@/components/site-ui";
 
 const input = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none";
@@ -37,12 +36,12 @@ export function AdminContact() {
       email: form.email.trim(),
       phone: form.phone.trim(),
       whatsapp: form.whatsapp.trim(),
-      instagram_url: normalizeSponsorLink(form.instagram_url) ?? "",
+      instagram_url: instagramLink(form.instagram_url) ?? "",
     };
     if (row.email && !emailLink(row.email)) return setMessage("Digite um e-mail válido.");
     if (row.phone && !phoneLink(row.phone)) return setMessage("Digite um telefone válido, com DDD.");
     if (row.whatsapp && !whatsappLink(row.whatsapp)) return setMessage("Digite o WhatsApp com código do país e DDD.");
-    if (form.instagram_url.trim() && !row.instagram_url) return setMessage("Digite um endereço de Instagram válido.");
+    if (form.instagram_url.trim() && !row.instagram_url) return setMessage("Digite um @usuário ou link de perfil do Instagram válido.");
 
     setBusy(true);
     const { error } = await supabase.from("contact_settings").upsert({ id: true, ...row, updated_at: new Date().toISOString() });
@@ -73,7 +72,7 @@ export function AdminContact() {
             <span className="mt-1 block text-xs text-muted-foreground">Inclua o código do país (55) e o DDD.</span>
           </label>
           <label className="text-sm">Instagram (opcional)
-            <input className={`${input} mt-1`} type="text" inputMode="url" placeholder="https://instagram.com/giovannecamargo" value={form.instagram_url} onChange={(event) => setForm({ ...form, instagram_url: event.target.value })} />
+            <input className={`${input} mt-1`} type="text" inputMode="url" placeholder="@giovannecamargo ou link do perfil" value={form.instagram_url} onChange={(event) => setForm({ ...form, instagram_url: event.target.value })} />
           </label>
           {message && <p role="status" className="text-sm text-primary sm:col-span-2">{message}</p>}
           <button className={`${btnGold} sm:col-span-2`} disabled={busy}>{busy ? "Salvando…" : "Salvar contatos"}</button>
