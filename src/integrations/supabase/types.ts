@@ -95,6 +95,33 @@ export type Database = {
         }
         Relationships: []
       }
+      hiring_settings: {
+        Row: {
+          contract_terms_text: string
+          deposit_percentage: number
+          id: boolean
+          updated_at: string
+          valid_cities: string
+          whatsapp_number: string
+        }
+        Insert: {
+          contract_terms_text?: string
+          deposit_percentage?: number
+          id?: boolean
+          updated_at?: string
+          valid_cities?: string
+          whatsapp_number?: string
+        }
+        Update: {
+          contract_terms_text?: string
+          deposit_percentage?: number
+          id?: boolean
+          updated_at?: string
+          valid_cities?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
       photos: {
         Row: {
           alt: string
@@ -149,6 +176,51 @@ export type Database = {
           rating?: number
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      show_packages: {
+        Row: {
+          code: string
+          created_at: string
+          description: string
+          duration: string
+          formation: string
+          id: string
+          is_active: boolean
+          is_highlighted: boolean
+          order_index: number
+          price: number
+          sound_included: boolean
+          title: string
+        }
+        Insert: {
+          code?: string
+          created_at?: string
+          description?: string
+          duration?: string
+          formation?: string
+          id?: string
+          is_active?: boolean
+          is_highlighted?: boolean
+          order_index?: number
+          price?: number
+          sound_included?: boolean
+          title?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string
+          duration?: string
+          formation?: string
+          id?: string
+          is_active?: boolean
+          is_highlighted?: boolean
+          order_index?: number
+          price?: number
+          sound_included?: boolean
+          title?: string
         }
         Relationships: []
       }

@@ -11,6 +11,7 @@ import {
 import { type ReactNode } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { Header, Footer, RouteProgress } from "@/components/site-shell";
+import { usesInstitutionalChrome } from "@/lib/site-chrome";
 
 import appCss from "../styles.css?url";
 
@@ -122,11 +123,16 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Header />
-      <RouteProgress />
-      <PageFrame />
+      <SiteChrome />
     </QueryClientProvider>
   );
+}
+
+
+function SiteChrome() {
+  const { pathname } = useLocation();
+  if (!usesInstitutionalChrome(pathname)) return <div key={pathname} className="page-enter"><Outlet /></div>;
+  return (<><Header /><RouteProgress /><PageFrame /></>);
 }
 
 function PageFrame() {
