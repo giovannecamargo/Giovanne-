@@ -1,5 +1,9 @@
 # Roadmap
 
+- [x] Analisar as três novas capturas e corrigir todas as mídias que ainda não carregam na Vercel.
+- [x] Tornar o vídeo antigo e sua capa compatíveis com hospedagem externa sem alterar o cadastro.
+- [x] Testar todas as páginas e mídias sem os endereços internos e salvar a correção no GitHub.
+
 - [x] Corrigir logo, fotos fixas e favicon na Vercel usando arquivos servidos pelo próprio site.
 - [x] Testar as páginas sem acesso aos endereços internos de mídia e salvar a correção no GitHub.
 

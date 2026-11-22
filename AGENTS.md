@@ -11,7 +11,7 @@
 
 ## Brand assets
 
-Use the shared Logo component for header and footer branding. Keep the original uploaded media records as Lovable Assets pointers, but serve fixed brand and editorial images from `public/images/` so external hosts such as Vercel can load them without Lovable's asset route. Derive the favicon from the same logo and serve it from `public/` to keep the brand consistent.
+Use the shared Logo component for header and footer branding. Keep the original uploaded media records as Lovable Assets pointers, but serve fixed brand, editorial and legacy media from `public/` so external hosts such as Vercel can load them without Lovable's asset route. Map only exact legacy database paths to their local copies; never use this as a fallback that resurrects deleted records. Derive the favicon from the same logo and serve it from `public/` to keep the brand consistent.
 
 ## Browser tabs stay independent
 
