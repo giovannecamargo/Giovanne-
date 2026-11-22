@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Quote } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { photos } from "@/data/site";
 import { bio } from "@/data/bio";
-import { btnOutline, d, Placeholder, SectionTitle } from "@/components/site-ui";
+import { btnOutline, d, SectionTitle } from "@/components/site-ui";
 
 export function About() {
   return (
@@ -31,22 +31,3 @@ export function About() {
   );
 }
 
-export function Testimonials() {
-  const kinds = ["Organizador de eventos", "Estabelecimento", "Empresa"];
-  return (
-    <section className="mx-auto max-w-7xl px-5 pb-24">
-      <p className="eyebrow reveal text-primary" style={d(5)}>Avaliações</p>
-      <h2 className="reveal mb-10 mt-3 text-3xl font-bold" style={d(6)}>Quem já contratou</h2>
-      <div className="grid gap-5 md:grid-cols-3">
-        {kinds.map((kind, index) => (
-          <figure key={kind} className="reveal rounded-sm border border-border bg-card/50 p-7" style={d(7 + index)}>
-            <Quote className="h-6 w-6 text-primary" />
-            <blockquote className="mt-4 text-muted-foreground">Espaço reservado para depoimento real.</blockquote>
-            <figcaption className="mt-6 text-sm"><div className="font-semibold">Nome do contratante</div><div className="text-muted-foreground">{kind}</div></figcaption>
-            <div className="mt-4"><Placeholder>Provisório</Placeholder></div>
-          </figure>
-        ))}
-      </div>
-    </section>
-  );
-}

@@ -38,3 +38,8 @@
 - [x] Testar inclusão, edição, renovação e remoção de patrocinadores com registros temporários.
 - [x] Testar agenda, fotos, vídeos e contatos na administração e nas páginas públicas, limpando todos os registros temporários.
 - [x] Validar no celular a renovação de patrocinador vencido, executar testes finais e salvar a versão no GitHub.
+
+- [x] Criar avaliações públicas com nota, comentário e aprovação obrigatória.
+- [x] Adicionar moderação de avaliações na administração.
+- [x] Testar envio, aprovação, recusa, exclusão e exibição pública em computador e celular.
+- [x] Salvar a versão no GitHub.

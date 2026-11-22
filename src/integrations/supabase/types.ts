@@ -119,6 +119,39 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          client_name: string
+          client_role: string
+          comment: string
+          created_at: string
+          id: string
+          rating: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          client_name: string
+          client_role?: string
+          comment: string
+          created_at?: string
+          id?: string
+          rating: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          client_name?: string
+          client_role?: string
+          comment?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       shows: {
         Row: {
           city: string
