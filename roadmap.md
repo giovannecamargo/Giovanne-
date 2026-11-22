@@ -18,3 +18,4 @@
 - [x] Testar a edição dos contatos e a exibição pública.
 - [x] Remover marcas visíveis e menções removíveis à plataforma no código.
 - [x] Ocultar o selo de edição e verificar que o site continua funcionando.
+- [x] Conferir todas as fotos, logotipos e capas de vídeos nas páginas públicas e na administração, no computador e no celular.
