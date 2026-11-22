@@ -29,3 +29,6 @@
 - [x] Restaurar o logo e as fotos principais com formatos compatíveis, sem depender de WebP.
 - [x] Salvar todas as alterações desta correção para atualização no GitHub.
 - [x] Revisar todas as exibições de imagens e impedir novos envios WebP de fotos, logos e capas; preservar os cadastros existentes.
+- [x] Criar o novo usuário e conceder acesso de administrador sem salvar a senha no código.
+- [ ] Testar o primeiro acesso à administração após o usuário confirmar o e-mail.
+- [x] Salvar a versão para sincronização com GitHub e Vercel.
