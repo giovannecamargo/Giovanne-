@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
+import { getPublishedMediaUrls } from "@/lib/media.functions";
 
 export async function signedUrls(paths: string[]) {
   if (!paths.length) return {} as Record<string, string>;
@@ -16,7 +17,8 @@ export function usePhotos(section: "shows" | "galeria") {
     queryFn: async () => {
       const { data, error } = await supabase.from("photos").select("*").eq("section", section).order("created_at", { ascending: false });
       if (error) throw error;
-      const urls = await signedUrls(data.map((p) => p.url));
+      const paths = data.map((p) => p.url);
+      const urls = paths.length ? await getPublishedMediaUrls({ data: { paths } }) : {};
       return data.map((p) => ({ ...p, src: urls[p.url] })).filter((p) => p.src);
     },
   });
@@ -30,7 +32,8 @@ export function useActiveSponsors() {
       const now = new Date().toISOString();
       const { data, error } = await supabase.from("sponsors").select("*").lte("starts_at", now).gt("ends_at", now).order("created_at");
       if (error) throw error;
-      const urls = await signedUrls(data.map((s) => s.logo_url));
+      const paths = data.map((s) => s.logo_url);
+      const urls = paths.length ? await getPublishedMediaUrls({ data: { paths } }) : {};
       return data.map((s) => ({ ...s, logo: urls[s.logo_url], link: normalizeSponsorLink(s.link_url) })).filter((s) => s.logo);
     },
   });

@@ -10,7 +10,7 @@ const inputClass = "mt-2 block w-full rounded-md border border-border bg-backgro
 type EditVideo = { id: string; video_path: string; cover_path: string; source_kind: string; caption: string };
 
 export function AdminVideos() {
-  const { data = [], isLoading, isError, refetch } = useGalleryVideos();
+  const { data = [], isLoading, isError, refetch } = useGalleryVideos(true);
   const qc = useQueryClient();
   const [editing, setEditing] = useState<EditVideo | null>(null);
   const [caption, setCaption] = useState("");

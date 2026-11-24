@@ -1,0 +1,1 @@
+drop policy if exists "public views published media" on storage.objects;
