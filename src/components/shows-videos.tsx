@@ -8,7 +8,7 @@ export function ShowsVideos() {
   const videos = data.filter((video) => video.src);
 
   return (
-    <section className="mx-auto max-w-7xl px-5 pb-16 pt-28 sm:pb-24 sm:pt-32">
+    <section className="mx-auto max-w-7xl px-4 pb-16 pt-24 sm:px-5 sm:pb-24 sm:pt-32">
       <header className="mb-8 flex flex-wrap items-end justify-between gap-6 border-b border-border pb-7 sm:mb-10">
         <div>
           <p className="reveal text-xs font-medium uppercase text-primary">Giovanne Camargo / Ao vivo</p>
@@ -20,7 +20,7 @@ export function ShowsVideos() {
       {isError && <div role="alert" className="mb-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">Não foi possível carregar os vídeos.<Button variant="outline" onClick={() => refetch()}>Tentar novamente</Button></div>}
       {isLoading && <p role="status" className="mb-4 text-sm text-muted-foreground">Carregando vídeos…</p>}
 
-      {!!videos.length && <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {!!videos.length && <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
         {videos.map((video) => <VideoCard key={video.id} src={video.src ?? ""} {...(video.poster ? { poster: video.poster } : {})} caption={video.caption} />)}
       </div>}
       {!isLoading && !videos.length && <p className="py-12 text-muted-foreground">Nenhum vídeo cadastrado.</p>}
@@ -34,7 +34,7 @@ function VideoCard({ src, poster, caption }: { src: string; poster?: string; cap
   const start = () => { setPlaying(true); void ref.current?.play(); };
   return (
     <figure className="group min-w-0">
-      <div className="relative aspect-video overflow-hidden rounded-xl bg-card ring-1 ring-border transition duration-500 group-hover:-translate-y-1 group-hover:ring-primary/50 motion-reduce:transform-none">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-card ring-1 ring-border transition duration-500 group-hover:-translate-y-1 group-hover:ring-primary/50 sm:aspect-video motion-reduce:transform-none">
         {poster && !playing && <img src={poster} alt="" aria-hidden loading="lazy" className="absolute inset-0 size-full scale-110 object-cover opacity-40 blur-2xl" />}
         <video ref={ref} className="relative block size-full object-contain" src={src} poster={poster} controls={playing} playsInline preload="none" aria-label={caption} onPlay={() => setPlaying(true)} />
         {!playing && (
@@ -45,9 +45,9 @@ function VideoCard({ src, poster, caption }: { src: string; poster?: string; cap
           </button>
         )}
       </div>
-      <figcaption className="mt-4 flex items-start gap-3">
-        <span className="mt-2 h-px w-6 shrink-0 bg-primary" />
-        <span className="text-base font-semibold leading-snug text-foreground break-words">{caption}</span>
+      <figcaption className="mt-3 flex items-start gap-3 sm:mt-4">
+        <span className="mt-[0.6rem] h-px w-6 shrink-0 bg-primary" />
+        <span className="min-w-0 text-[0.95rem] font-semibold leading-snug text-foreground break-words sm:text-base">{caption}</span>
       </figcaption>
     </figure>
   );
