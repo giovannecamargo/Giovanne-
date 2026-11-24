@@ -54,6 +54,6 @@
 - [x] Remover a aba e o gerenciamento de Agenda do painel administrativo, sem apagar os dados existentes.
 - [x] Testar o site e o painel sem Agenda e salvar a remoção no GitHub.
 
-- [ ] Permitir a seleção de vídeos MOV na administração, além de MP4 e WebM.
-- [ ] Substituir o limite de envio de 10 MB por um limite adequado a vídeos de shows, com validação clara.
-- [ ] Testar a seleção e o envio de vídeos, remover os registros temporários e salvar a correção no GitHub.
+- [x] Permitir a seleção de vídeos MOV na administração, além de MP4 e WebM.
+- [x] Substituir o limite de envio de 10 MB por um limite adequado a vídeos de shows, com validação clara.
+- [x] Testar a seleção e o envio de vídeos, remover os registros temporários e salvar a correção no GitHub.

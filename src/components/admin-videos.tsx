@@ -4,7 +4,7 @@ import { Film, Pencil, Save, Trash2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { isStoredVideoMedia, useGalleryVideos } from "@/lib/gallery-videos";
-import { validateGalleryFile, videoCaptionSchema } from "@/lib/gallery-video-validation";
+import { validateGalleryFile, videoCaptionSchema, videoFileExtension } from "@/lib/gallery-video-validation";
 
 const inputClass = "mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none";
 type EditVideo = { id: string; video_path: string; cover_path: string; source_kind: string; caption: string };
@@ -39,9 +39,12 @@ export function AdminVideos() {
   }
 
   async function upload(file: File, folder: string) {
-    const ext: Record<string, string> = { "video/mp4": "mp4", "video/webm": "webm", "image/jpeg": "jpg", "image/png": "png" };
-    const path = `${folder}/${crypto.randomUUID()}.${ext[file.type]}`;
-    const { error } = await supabase.storage.from("media").upload(path, file, { contentType: file.type });
+    const imageExtensions: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png" };
+    const ext = folder === "videos" ? videoFileExtension(file) : imageExtensions[file.type];
+    if (!ext) throw new Error("Formato de arquivo não suportado.");
+    const path = `${folder}/${crypto.randomUUID()}.${ext}`;
+    const contentType = folder === "videos" ? (ext === "mov" ? "video/quicktime" : `video/${ext}`) : file.type;
+    const { error } = await supabase.storage.from("media").upload(path, file, { contentType });
     if (error) throw error;
     return path;
   }
@@ -99,7 +102,7 @@ export function AdminVideos() {
     <section ref={formSectionRef} className="scroll-mt-28 border-b border-border pb-8">
       <h2 className="mb-5 text-xl font-semibold">{editing ? "Editar vídeo" : "Adicionar vídeo"}</h2>
       <form key={formKey} onSubmit={save} className="grid gap-5 sm:grid-cols-2">
-        <label className="text-sm">{editing ? "Substituir vídeo (opcional)" : "Arquivo do vídeo"}<input className={inputClass} type="file" accept="video/mp4,video/webm" disabled={busy} required={!editing} onChange={e => setVideoFile(e.target.files?.[0] ?? null)} /></label>
+        <label className="text-sm">{editing ? "Substituir vídeo (opcional)" : "Arquivo do vídeo"}<input className={inputClass} type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" disabled={busy} required={!editing} onChange={e => setVideoFile(e.target.files?.[0] ?? null)} /><span className="mt-2 block text-xs text-muted-foreground">MP4, WebM ou MOV, até 500 MB.</span></label>
         <label className="text-sm">{editing ? "Substituir capa (opcional)" : "Capa"}<input className={inputClass} type="file" accept="image/jpeg,image/png" disabled={busy} required={!editing} onChange={e => setCoverFile(e.target.files?.[0] ?? null)} /></label>
         <label className="text-sm sm:col-span-2">Legenda<textarea ref={captionRef} aria-label="Título do vídeo" className={`${inputClass} min-h-24`} required maxLength={500} disabled={busy} value={caption} onChange={e => setCaption(e.target.value)} /></label>
         <div className="flex flex-wrap gap-3 sm:col-span-2"><Button type="submit" disabled={busy}><Upload />{busy ? "Salvando…" : editing ? "Salvar alterações" : "Adicionar vídeo"}</Button>{editing && <Button variant="outline" type="button" disabled={busy} onClick={reset}><X />Cancelar</Button>}</div>
