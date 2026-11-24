@@ -1,4 +1,5 @@
-import { Film } from "lucide-react";
+import { useRef, useState } from "react";
+import { Film, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGalleryVideos } from "@/lib/gallery-videos";
 
@@ -19,15 +20,35 @@ export function ShowsVideos() {
       {isError && <div role="alert" className="mb-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">Não foi possível carregar os vídeos.<Button variant="outline" onClick={() => refetch()}>Tentar novamente</Button></div>}
       {isLoading && <p role="status" className="mb-4 text-sm text-muted-foreground">Carregando vídeos…</p>}
 
-      {!!videos.length && <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {videos.map((video) => (
-          <figure key={video.id} className="overflow-hidden rounded-sm border border-border bg-card">
-            <video className="block aspect-[9/16] w-full bg-background object-contain" src={video.src} poster={video.poster || undefined} controls playsInline preload="none" aria-label={video.caption} />
-            <figcaption className="p-4 text-sm">{video.caption}</figcaption>
-          </figure>
-        ))}
+      {!!videos.length && <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        {videos.map((video) => <VideoCard key={video.id} src={video.src} poster={video.poster || undefined} caption={video.caption} />)}
       </div>}
       {!isLoading && !videos.length && <p className="py-12 text-muted-foreground">Nenhum vídeo cadastrado.</p>}
     </section>
+  );
+}
+
+function VideoCard({ src, poster, caption }: { src: string; poster?: string; caption: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const start = () => { setPlaying(true); void ref.current?.play(); };
+  return (
+    <figure className="group min-w-0">
+      <div className="relative aspect-video overflow-hidden rounded-xl bg-card ring-1 ring-border transition duration-500 group-hover:-translate-y-1 group-hover:ring-primary/50 motion-reduce:transform-none">
+        {poster && !playing && <img src={poster} alt="" aria-hidden loading="lazy" className="absolute inset-0 size-full scale-110 object-cover opacity-40 blur-2xl" />}
+        <video ref={ref} className="relative block size-full object-contain" src={src} poster={poster} controls={playing} playsInline preload="none" aria-label={caption} onPlay={() => setPlaying(true)} />
+        {!playing && (
+          <button type="button" onClick={start} aria-label={`Reproduzir ${caption}`} className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-background/70 via-transparent to-transparent">
+            <span className="flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition duration-300 group-hover:scale-110 motion-reduce:transform-none sm:size-[4.5rem]">
+              <Play className="ml-1 size-7 fill-current" />
+            </span>
+          </button>
+        )}
+      </div>
+      <figcaption className="mt-4 flex items-start gap-3">
+        <span className="mt-2 h-px w-6 shrink-0 bg-primary" />
+        <span className="text-base font-semibold leading-snug text-foreground break-words">{caption}</span>
+      </figcaption>
+    </figure>
   );
 }
