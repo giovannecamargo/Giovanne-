@@ -2,7 +2,7 @@ import { z } from "zod";
 import { validateCompatibleImage } from "@/lib/image-upload";
 
 export const videoCaptionSchema = z.string().trim().min(1, "Informe a legenda.").max(500, "A legenda deve ter até 500 caracteres.");
-export const maxGalleryVideoSize = 500 * 1024 * 1024;
+export const maxGalleryVideoSize = 1024 * 1024 * 1024;
 
 type GalleryFile = Pick<File, "type" | "size"> & Partial<Pick<File, "name">>;
 
@@ -17,5 +17,5 @@ export function validateGalleryFile(file: GalleryFile, kind: "video" | "cover") 
   if (kind === "cover") validateCompatibleImage(file);
   if (kind === "video" && !videoFileExtension(file)) throw new Error("Envie um vídeo MP4, WebM ou MOV.");
   if (file.size === 0) throw new Error("O arquivo está vazio.");
-  if (kind === "video" && file.size > maxGalleryVideoSize) throw new Error("O vídeo deve ter no máximo 500 MB.");
+  if (kind === "video" && file.size > maxGalleryVideoSize) throw new Error("O vídeo deve ter no máximo 1 GB.");
 }

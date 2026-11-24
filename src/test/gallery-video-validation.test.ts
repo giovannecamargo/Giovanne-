@@ -15,9 +15,10 @@ describe("Gallery video registration", () => {
     expect(() => validateGalleryFile({ type: "", size: 100, name: "show.mov" }, "video")).not.toThrow();
     expect(videoFileExtension({ type: "video/quicktime", name: "show.MOV" })).toBe("mov");
   });
-  it("accepts videos up to 500 MB and rejects larger files", () => {
-    expect(() => validateGalleryFile({ type: "video/mp4", size: maxGalleryVideoSize }, "video")).not.toThrow();
-    expect(() => validateGalleryFile({ type: "video/mp4", size: maxGalleryVideoSize + 1 }, "video")).toThrow("500 MB");
+  it("accepts videos up to 1 GB and rejects larger files", () => {
+    expect(maxGalleryVideoSize).toBe(1073741824);
+    expect(() => validateGalleryFile({ type: "video/mp4", size: 1073741824 }, "video")).not.toThrow();
+    expect(() => validateGalleryFile({ type: "video/mp4", size: 1073741825 }, "video")).toThrow("1 GB");
   });
   it("requires an image cover, not a video", () => {
     expect(() => validateGalleryFile({ type: "video/mp4", size: 100 }, "cover")).toThrow();
