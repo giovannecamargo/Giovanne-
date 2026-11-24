@@ -57,3 +57,5 @@
 - [x] Permitir a seleção de vídeos MOV na administração, além de MP4 e WebM.
 - [x] Substituir o limite de envio de 10 MB por um limite adequado a vídeos de shows, com validação clara.
 - [x] Testar a seleção e o envio de vídeos, remover os registros temporários e salvar a correção no GitHub.
+- [x] Conferir que a versão mais recente está no repositório que alimenta a Vercel.
+- [ ] Confirmar a implantação na Vercel — aguarda o endereço do site na Vercel, pois não há acesso a essa conta daqui.
