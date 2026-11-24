@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CalendarDays, MessageCircle, Music2, PlayCircle, Users } from "lucide-react";
+import { MessageCircle, Music2, PlayCircle, Users } from "lucide-react";
 import { photos } from "@/data/site";
 import { whatsappLink } from "@/lib/contact-info";
 import { useContactInfo } from "@/lib/use-contact-info";
@@ -21,7 +21,7 @@ export function Hero() {
           <p className="reveal mt-6 max-w-sm text-lg text-foreground/85" style={d(3)}>Música que conecta pessoas e transforma momentos em boas memórias.</p>
           <div className="reveal mt-8 flex flex-wrap gap-3" style={d(4)}>
             {hiringLink ? <a href={hiringLink} target="_blank" rel="noreferrer" className={btnGold}><MessageCircle className="h-4 w-4" /> Contratar Show</a> : <Link to="/contato" className={btnGold}><MessageCircle className="h-4 w-4" /> Contratar Show</Link>}
-            <Link to="/agenda" className={btnOutline}>Ver Agenda</Link>
+            <Link to="/shows" className={btnOutline}>Ver Shows</Link>
           </div>
         </div>
       </div>
@@ -32,13 +32,12 @@ export function Hero() {
 export function Highlights() {
   const items = [
     { icon: Music2, t: "Shows e Eventos", description: "Eventos particulares, corporativos e festivais.", to: "/shows" },
-    { icon: CalendarDays, t: "Agenda Atualizada", description: "Acompanhe os próximos shows.", to: "/agenda" },
     { icon: Users, t: "Contratação", description: "Fale diretamente pelo WhatsApp.", to: "/contato" },
     { icon: PlayCircle, t: "Vídeos e Fotos", description: "Veja registros das apresentações.", to: "/galeria" },
   ];
   return (
     <section className="border-y border-border bg-card/60">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-10 px-5 py-12 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-10 px-5 py-12 lg:grid-cols-3">
         {items.map(({ icon: Icon, t, description, to }, index) => (
           <Link key={t} to={to} className="reveal group px-3 text-center" style={d(5 + index)}>
             <Icon className="mx-auto h-8 w-8 text-primary transition duration-300 group-hover:-translate-y-1" strokeWidth={1.4} />

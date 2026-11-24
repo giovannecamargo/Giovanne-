@@ -1,10 +1,10 @@
 # Giovanne Camargo — Site Oficial
 
-Site oficial do cantor sertanejo Giovanne Camargo, com biografia, agenda, shows, galeria, patrocinadores e contato.
+Site oficial do cantor sertanejo Giovanne Camargo, com biografia, shows, galeria, patrocinadores e contato.
 
 ## Administração
 
-A área administrativa permite gerenciar patrocinadores, agenda, fotos, vídeos e informações de contato.
+A área administrativa permite gerenciar patrocinadores, fotos, vídeos, avaliações e informações de contato.
 
 ## Desenvolvimento
 

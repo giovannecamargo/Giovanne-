@@ -16,6 +16,15 @@ describe("App routing", () => {
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
 
+  it("does not expose the removed public agenda page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/agenda");
+
+    expect(matches.at(-1)?.routeId).toBe(rootRouteId);
+    expect(nav.map((item) => item.to as string)).not.toContain("/agenda");
+  });
+
   // Every header menu item must have a real page: a nav entry pointing at a
   // missing route file renders the 404 screen.
   it("has a real page for every header menu item", () => {

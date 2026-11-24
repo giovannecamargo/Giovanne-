@@ -21,10 +21,10 @@ the URL, or the router's per-tab scroll cache, so two open tabs never influence
 each other. Guarded by `src/test/tab-independence.test.ts`.
 
 ## Admin content
-Sponsors, agenda shows and page photos live in Lovable Cloud tables; images go in the private `media` bucket and are shown via signed URLs (public buckets are blocked in this workspace). The first account created becomes an admin; additional admin access requires a valid, unexpired, single-use invitation and is stored in `public.user_roles`. Writes are allowed only for the admin role. Password recovery uses the public `/reset-password` page and never asks for the current password during recovery.
+Sponsors and page photos live in Lovable Cloud tables; images go in the private `media` bucket and are shown via signed URLs (public buckets are blocked in this workspace). The first account created becomes an admin; additional admin access requires a valid, unexpired, single-use invitation and is stored in `public.user_roles`. Writes are allowed only for the admin role. Password recovery uses the public `/reset-password` page and never asks for the current password during recovery.
 A sponsor may carry an optional destination address: when it has one, its logo on the public site opens that address in a new tab; when it has none, the logo stays non-clickable. Typed addresses are sanitized to plain http(s) by `normalizeSponsorLink` (`src/lib/sponsor-link.ts`) so a logo can never open a script — guarded by `src/test/sponsor-link.test.ts`.
 Sponsor panels keep a fixed size with the logo centered inside; the empty strips around the logo are painted with the logo's own edge color, sampled client-side by `edgeColor` (`src/lib/logo-bg.ts`) — guarded by `src/test/logo-bg.test.ts`. Never resize a panel to fit a logo.
-Every agenda show carries an access state (`public` = open to the public, `private` = closed event), set in the admin agenda form; the public agenda labels each card through `normalizeShowAccess` / `showAccessLabel` (`src/lib/show-access.ts`) — guarded by `src/test/show-access.test.ts`. Anything that is not explicitly `private` is treated as public.
+The public Agenda page and its admin management UI were removed by request. Existing show records remain in the database without a site or admin interface; do not recreate either interface without an explicit request.
 
 ## Route performance
 Keep the site shell and each page's sections in separate modules so a route downloads only the code and media it uses; this prevents unrelated photo and video assets from slowing every page.

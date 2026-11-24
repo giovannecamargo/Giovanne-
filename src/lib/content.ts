@@ -2,31 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
 
-const MONTHS = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-
 export async function signedUrls(paths: string[]) {
   if (!paths.length) return {} as Record<string, string>;
   const { data } = await supabase.storage.from("media").createSignedUrls(paths, 60 * 60 * 6);
   const map: Record<string, string> = {};
   data?.forEach((d) => { if (d.path && d.signedUrl) map[d.path] = d.signedUrl; });
   return map;
-}
-
-export function formatShowDate(date: string) {
-  const [, m, d] = date.split("-");
-  return { day: d, month: MONTHS[Number(m) - 1] ?? "" };
-}
-
-export function useShows() {
-  return useQuery({
-    queryKey: ["shows"],
-    queryFn: async () => {
-      const today = new Date().toISOString().slice(0, 10);
-      const { data, error } = await supabase.from("shows").select("*").gte("event_date", today).order("event_date");
-      if (error) throw error;
-      return data;
-    },
-  });
 }
 
 export function usePhotos(section: "shows" | "galeria") {

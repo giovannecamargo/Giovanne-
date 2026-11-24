@@ -4,9 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Trash2, LogOut, Upload, Pencil, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { btnGold, btnOutline } from "@/components/site-ui";
-import { formatShowDate, signedUrls } from "@/lib/content";
+import { signedUrls } from "@/lib/content";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
-import { normalizeShowAccess, showAccessShortLabel, type ShowAccess } from "@/lib/show-access";
 import type { Session } from "@supabase/supabase-js";
 import { AdminVideos } from "@/components/admin-videos";
 import { AdminContact } from "@/components/admin-contact";
@@ -168,8 +167,8 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Dashboard() {
-  const [tab, setTab] = useState<"sponsors" | "agenda" | "shows" | "galeria" | "reviews" | "contact">("sponsors");
-  const tabs = [["sponsors", "Patrocinadores"], ["agenda", "Agenda"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"], ["reviews", "Avaliações"], ["contact", "Contato"]] as const;
+  const [tab, setTab] = useState<"sponsors" | "shows" | "galeria" | "reviews" | "contact">("sponsors");
+  const tabs = [["sponsors", "Patrocinadores"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"], ["reviews", "Avaliações"], ["contact", "Contato"]] as const;
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-2">
@@ -179,7 +178,6 @@ function Dashboard() {
         <button onClick={() => supabase.auth.signOut()} className="ml-auto inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><LogOut className="h-4 w-4" />Sair</button>
       </div>
       {tab === "sponsors" && <Sponsors />}
-      {tab === "agenda" && <AgendaAdmin />}
       {tab === "shows" && <div className="space-y-12"><section><h2 className="mb-4 text-xl font-semibold">Fotos da página Shows</h2><PhotosAdmin section="shows" /></section><section><h2 className="mb-4 text-xl font-semibold">Vídeos da página Shows</h2><AdminVideos /></section></div>}
       {tab === "galeria" && <PhotosAdmin section="galeria" />}
       {tab === "reviews" && <AdminReviews />}
@@ -349,101 +347,6 @@ function Sponsors() {
                   )}
                 </div>
                 <button onClick={() => remove(s.id, s.logo_url)} aria-label="Remover" className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
-              </li>
-            );
-          })}
-        </ul>
-      </Panel>
-    </div>
-  );
-}
-
-function AgendaAdmin() {
-  const qc = useQueryClient();
-  const { data = [] } = useQuery({
-    queryKey: ["admin-shows"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("shows").select("*").order("event_date");
-      if (error) throw error;
-      return data;
-    },
-  });
-  const empty = { id: "", name: "", city: "", event_date: today(), event_time: "", visibility: "public" as ShowAccess, details: "", ticket_url: "" };
-  const [form, setForm] = useState(empty);
-  const [msg, setMsg] = useState<string | null>(null);
-  const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-shows"] }); qc.invalidateQueries({ queryKey: ["shows"] }); };
-
-  async function save(e: FormEvent) {
-    e.preventDefault(); setMsg(null);
-    const { id, ...rest } = form;
-    const ticket = rest.ticket_url.trim() ? normalizeSponsorLink(rest.ticket_url) : null;
-    if (rest.ticket_url.trim() && !ticket) return setMsg("Link do ingresso inválido.");
-    const row = { ...rest, details: rest.details.trim(), ticket_url: ticket };
-    const { error } = id ? await supabase.from("shows").update(row).eq("id", id) : await supabase.from("shows").insert(row);
-    if (error) return setMsg(error.message);
-    setForm(empty); refresh(); setMsg(id ? "Show atualizado." : "Show adicionado.");
-  }
-  async function remove(id: string) {
-    if (!confirm("Remover este show?")) return;
-    await supabase.from("shows").delete().eq("id", id); refresh();
-  }
-
-  return (
-    <div className="space-y-6">
-      <Panel title={form.id ? "Editar show" : "Adicionar show"}>
-        <form onSubmit={save} className="grid gap-4 sm:grid-cols-2">
-          <label className="text-sm sm:col-span-2">Nome do evento<input className={`${input} mt-1`} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /></label>
-          <label className="text-sm sm:col-span-2">Cidade — UF<input className={`${input} mt-1`} value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} required /></label>
-          <label className="text-sm">Data<input className={`${input} mt-1`} type="date" value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} required /></label>
-          <label className="text-sm">Horário<input className={`${input} mt-1`} type="time" value={form.event_time} onChange={(e) => setForm({ ...form, event_time: e.target.value })} required /></label>
-          <div className="text-sm sm:col-span-2">
-            <span className="text-muted-foreground">Acesso do show</span>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {([["public", "Aberto ao público"], ["private", "Privado"]] as const).map(([value, label]) => (
-                <button
-                  type="button"
-                  key={value}
-                  aria-pressed={form.visibility === value}
-                  onClick={() => setForm({ ...form, visibility: value })}
-                  className={`rounded-md border px-3 py-2 text-sm transition duration-300 ${form.visibility === value ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-            <p className="mt-2 text-xs text-muted-foreground">
-              “Aberto ao público” aparece na agenda com a etiqueta dourada. “Privado” marca o evento como fechado (particular ou corporativo).
-            </p>
-          </div>
-          <label className="text-sm sm:col-span-2">Informações sobre o show<textarea className={`${input} mt-1 min-h-24`} value={form.details} onChange={(e) => setForm({ ...form, details: e.target.value })} placeholder="Local, abertura dos portões, classificação, atrações…" /></label>
-          <label className="text-sm sm:col-span-2">Link para compra de ingresso (opcional)<input className={`${input} mt-1`} value={form.ticket_url} onChange={(e) => setForm({ ...form, ticket_url: e.target.value })} placeholder="ex.: sympla.com.br/meu-evento" /></label>
-          {msg && <p className="text-sm text-primary sm:col-span-2">{msg}</p>}
-          <div className="flex gap-3 sm:col-span-2">
-            <button className={`${btnGold} flex-1`}>{form.id ? "Salvar alterações" : "Adicionar"}</button>
-            {form.id && <button type="button" className={btnOutline} onClick={() => setForm(empty)}>Cancelar</button>}
-          </div>
-        </form>
-      </Panel>
-      <Panel title="Shows cadastrados">
-        {!data.length && <p className="text-sm text-muted-foreground">Nenhum show cadastrado.</p>}
-        <ul className="divide-y divide-border">
-          {data.map((s) => {
-            const { day, month } = formatShowDate(s.event_date);
-            const past = s.event_date < today();
-            return (
-              <li key={s.id} className={`flex items-center gap-4 py-3 ${past ? "opacity-50" : ""}`}>
-                <div className="w-14 text-center"><div className="font-display text-xl font-bold text-primary">{day}</div><div className="text-xs text-muted-foreground">{month}</div></div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-medium">{s.name}</div>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-                    <span>{s.city} · {s.event_time}{past ? " · já passou" : ""}</span>
-                    <span className={`rounded-full border px-2 py-0.5 text-[10px] ${normalizeShowAccess(s.visibility) === "private" ? "border-border" : "border-primary/40 text-primary"}`}>
-                      {showAccessShortLabel(normalizeShowAccess(s.visibility))}
-                    </span>
-                  </div>
-                </div>
-                <button onClick={() => setForm({ id: s.id, name: s.name, city: s.city, event_date: s.event_date, event_time: s.event_time, visibility: normalizeShowAccess(s.visibility), details: s.details ?? "", ticket_url: s.ticket_url ?? "" })} className="text-sm text-primary hover:underline">Editar</button>
-                <button onClick={() => remove(s.id)} aria-label="Remover" className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
               </li>
             );
           })}

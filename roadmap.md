@@ -49,3 +49,7 @@
 - [x] Apagar e desativar pacotes e configurações comerciais, preservando o backup.
 - [x] Verificar o site institucional e salvar o cancelamento no GitHub.
 - [ ] Excluir as duas estruturas comerciais vazias — aguarda a permissão de mudanças incompatíveis do banco.
+
+- [x] Remover a página pública Agenda e todos os atalhos para ela.
+- [x] Remover a aba e o gerenciamento de Agenda do painel administrativo, sem apagar os dados existentes.
+- [x] Testar o site e o painel sem Agenda e salvar a remoção no GitHub.
