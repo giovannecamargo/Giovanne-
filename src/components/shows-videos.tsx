@@ -21,7 +21,7 @@ export function ShowsVideos() {
       {isLoading && <p role="status" className="mb-4 text-sm text-muted-foreground">Carregando vídeos…</p>}
 
       {!!videos.length && <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-        {videos.map((video) => <VideoCard key={video.id} src={video.src} poster={video.poster || undefined} caption={video.caption} />)}
+        {videos.map((video) => <VideoCard key={video.id} src={video.src ?? ""} {...(video.poster ? { poster: video.poster } : {})} caption={video.caption} />)}
       </div>}
       {!isLoading && !videos.length && <p className="py-12 text-muted-foreground">Nenhum vídeo cadastrado.</p>}
     </section>
