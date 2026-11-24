@@ -9,7 +9,7 @@ import { nextGalleryIndex, uniqueGalleryPhotos, type GalleryPhoto } from "@/lib/
 
 export function ShowsGallery() {
   const { data, isLoading, isError, refetch } = usePhotos("shows");
-  const { data: videoData = [] } = useGalleryVideos();
+  const { data: videoData = [], isError: videosError, refetch: refetchVideos } = useGalleryVideos();
   const videos = videoData.filter((video) => video.src);
   const [photoId, setPhotoId] = useState<string | null>(null);
   const photos = uniqueGalleryPhotos([
@@ -55,6 +55,7 @@ export function ShowsGallery() {
       </div>}
       {!isLoading && !photos.length && <p className="py-12 text-muted-foreground">Nenhuma foto cadastrada.</p>}
 
+      {videosError && <div role="alert" className="mt-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">Não foi possível carregar os vídeos.<Button variant="outline" onClick={() => refetchVideos()}>Tentar novamente</Button></div>}
       {!!videos.length && <div className="mt-14">
         <div className="mb-5 flex items-center justify-between border-b border-border pb-4"><h2 className="text-lg font-semibold">Vídeos ao vivo</h2><Film className="size-4 text-primary" /></div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -17,6 +17,7 @@ import { Route as PatrocinadoresRouteImport } from './routes/patrocinadores'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ShowsRouteImport } from './routes/shows'
 import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as ApiPublicMediaRouteImport } from './routes/api/public/media'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +59,11 @@ const SobreRoute = SobreRouteImport.update({
   path: '/sobre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMediaRoute = ApiPublicMediaRouteImport.update({
+  id: '/api/public/media',
+  path: '/api/public/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
+  '/api/public/media': typeof ApiPublicMediaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
+  '/api/public/media': typeof ApiPublicMediaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/shows': typeof ShowsRoute
   '/sobre': typeof SobreRoute
+  '/api/public/media': typeof ApiPublicMediaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shows'
     | '/sobre'
+    | '/api/public/media'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shows'
     | '/sobre'
+    | '/api/public/media'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shows'
     | '/sobre'
+    | '/api/public/media'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   ShowsRoute: typeof ShowsRoute
   SobreRoute: typeof SobreRoute
+  ApiPublicMediaRoute: typeof ApiPublicMediaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SobreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/media': {
+      id: '/api/public/media'
+      path: '/api/public/media'
+      fullPath: '/api/public/media'
+      preLoaderRoute: typeof ApiPublicMediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   ShowsRoute: ShowsRoute,
   SobreRoute: SobreRoute,
+  ApiPublicMediaRoute: ApiPublicMediaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

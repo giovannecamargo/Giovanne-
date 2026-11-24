@@ -27,6 +27,7 @@ Sponsor panels keep a fixed size with the logo centered inside; the empty strips
 The public Agenda page and its admin management UI were removed by request. Existing show records remain in the database without a site or admin interface; do not recreate either interface without an explicit request.
 
 ## Route performance
+Public media signing uses a server-only verifier and an immutable Cloud API endpoint for external hosts without private credentials; this keeps published media readable without exposing keys or relaxing storage permissions.
 Keep the site shell and each page's sections in separate modules so a route downloads only the code and media it uses; this prevents unrelated photo and video assets from slowing every page.
 
 ## Gallery presentation

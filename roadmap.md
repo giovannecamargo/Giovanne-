@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Corrigir a exibição pública dos vídeos e patrocinadores cadastrados, verificar as mídias reais e salvar no GitHub.
+- [ ] Publicar a correção autorizada e conferir as mídias no domínio principal.
+
 - [x] Analisar as três novas capturas e corrigir todas as mídias que ainda não carregam na Vercel.
 - [x] Tornar o vídeo antigo e sua capa compatíveis com hospedagem externa sem alterar o cadastro.
 - [x] Testar todas as páginas e mídias sem os endereços internos e salvar a correção no GitHub.
