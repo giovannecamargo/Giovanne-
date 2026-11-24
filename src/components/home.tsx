@@ -33,7 +33,7 @@ export function Highlights() {
   const items = [
     { icon: Music2, t: "Shows e Eventos", description: "Eventos particulares, corporativos e festivais.", to: "/shows" },
     { icon: Users, t: "Contratação", description: "Fale diretamente pelo WhatsApp.", to: "/contato" },
-    { icon: PlayCircle, t: "Vídeos e Fotos", description: "Veja registros das apresentações.", to: "/galeria" },
+    { icon: PlayCircle, t: "Vídeos dos Shows", description: "Assista às apresentações ao vivo.", to: "/shows" },
   ];
   return (
     <section className="border-y border-border bg-card/60">

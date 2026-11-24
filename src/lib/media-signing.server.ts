@@ -26,7 +26,7 @@ export async function signPublishedMedia(data: { paths: string[] }) {
 
     const now = new Date().toISOString();
     const [photos, sponsors, videosByPath, videosByCover] = await Promise.all([
-      supabasePublic.from("photos").select("url").in("url", requested).in("section", ["shows", "galeria"]),
+      supabasePublic.from("photos").select("url").in("url", requested).in("section", ["shows", "galeria", "sobre"]),
       supabasePublic.from("sponsors").select("logo_url").in("logo_url", requested).lte("starts_at", now).gt("ends_at", now),
       supabasePublic.from("gallery_videos").select("video_path,cover_path").in("video_path", requested),
       supabasePublic.from("gallery_videos").select("video_path,cover_path").in("cover_path", requested),

@@ -25,6 +25,15 @@ describe("App routing", () => {
     expect(nav.map((item) => item.to as string)).not.toContain("/agenda");
   });
 
+  it("does not expose the removed Galeria page or menu", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/galeria");
+
+    expect(matches.at(-1)?.routeId).toBe(rootRouteId);
+    expect(nav.map((item) => item.to as string)).not.toContain("/galeria");
+  });
+
   // Every header menu item must have a real page: a nav entry pointing at a
   // missing route file renders the 404 screen.
   it("has a real page for every header menu item", () => {

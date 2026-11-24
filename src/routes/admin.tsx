@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Trash2, LogOut, Upload, Pencil, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { btnGold, btnOutline } from "@/components/site-ui";
-import { signedUrls } from "@/lib/content";
+import { signedUrls, type PhotoSection } from "@/lib/content";
 import { normalizeSponsorLink } from "@/lib/sponsor-link";
 import type { Session } from "@supabase/supabase-js";
 import { AdminVideos } from "@/components/admin-videos";
@@ -167,8 +167,8 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Dashboard() {
-  const [tab, setTab] = useState<"sponsors" | "shows" | "galeria" | "reviews" | "contact">("sponsors");
-  const tabs = [["sponsors", "Patrocinadores"], ["shows", "Página Shows"], ["galeria", "Fotos da Galeria"], ["reviews", "Avaliações"], ["contact", "Contato"]] as const;
+  const [tab, setTab] = useState<"sponsors" | "shows" | "sobre" | "reviews" | "contact">("sponsors");
+  const tabs = [["sponsors", "Patrocinadores"], ["shows", "Vídeos dos Shows"], ["sobre", "Foto do Sobre"], ["reviews", "Avaliações"], ["contact", "Contato"]] as const;
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-2">
@@ -178,8 +178,8 @@ function Dashboard() {
         <button onClick={() => supabase.auth.signOut()} className="ml-auto inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><LogOut className="h-4 w-4" />Sair</button>
       </div>
       {tab === "sponsors" && <Sponsors />}
-      {tab === "shows" && <div className="space-y-12"><section><h2 className="mb-4 text-xl font-semibold">Fotos da página Shows</h2><PhotosAdmin section="shows" /></section><section><h2 className="mb-4 text-xl font-semibold">Vídeos da página Shows</h2><AdminVideos /></section></div>}
-      {tab === "galeria" && <PhotosAdmin section="galeria" />}
+      {tab === "shows" && <AdminVideos />}
+      {tab === "sobre" && <PhotosAdmin section="sobre" />}
       {tab === "reviews" && <AdminReviews />}
       {tab === "contact" && <AdminContact />}
     </div>
@@ -356,7 +356,7 @@ function Sponsors() {
   );
 }
 
-function PhotosAdmin({ section }: { section: "shows" | "galeria" }) {
+function PhotosAdmin({ section }: { section: PhotoSection }) {
   const qc = useQueryClient();
   const key = ["admin-photos", section];
   const { data = [] } = useQuery({
@@ -378,7 +378,7 @@ function PhotosAdmin({ section }: { section: "shows" | "galeria" }) {
     try {
       for (const f of files) {
         const path = await uploadFile(f, section);
-        const { error } = await supabase.from("photos").insert({ url: path, section });
+        const { error } = await supabase.from("photos").insert({ url: path, section, alt: section === "sobre" ? "Giovanne Camargo em apresentação" : "" });
         if (error) throw error;
       }
       refresh(); setMsg(`${files.length} foto(s) adicionada(s).`);
@@ -392,7 +392,8 @@ function PhotosAdmin({ section }: { section: "shows" | "galeria" }) {
   }
 
   return (
-    <Panel title={section === "shows" ? "Fotos da página Shows" : "Fotos da página Galeria"}>
+    <Panel title="Foto da página Sobre">
+      <p className="mb-5 text-sm text-muted-foreground">Etiqueta: <strong className="text-primary">Sobre</strong>. Para trocar a foto, envie uma nova; a mais recente será exibida na página.</p>
       <label className={`${btnGold} cursor-pointer`}>
         <Upload className="h-4 w-4" />{busy ? "Enviando…" : "Adicionar fotos"}
         <input type="file" accept="image/jpeg,image/png" multiple className="hidden" disabled={busy} onChange={(e) => { onFiles(e.target.files); e.target.value = ""; }} />

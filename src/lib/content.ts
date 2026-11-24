@@ -11,7 +11,9 @@ export async function signedUrls(paths: string[]) {
   return map;
 }
 
-export function usePhotos(section: "shows" | "galeria") {
+export type PhotoSection = "sobre";
+
+export function usePhotos(section: PhotoSection) {
   return useQuery({
     queryKey: ["photos", section],
     queryFn: async () => {

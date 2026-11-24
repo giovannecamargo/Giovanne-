@@ -1,5 +1,11 @@
 # Roadmap
 
+- [x] Retirar as duas fotos fixas das páginas Shows e Galeria, mantendo a foto principal no Início e a foto branca como padrão do Sobre.
+- [x] Cadastrar a foto branca com a etiqueta Sobre e permitir sua substituição pela administração.
+- [x] Deixar a página Shows somente com vídeos e remover seu gerenciamento de fotos.
+- [x] Excluir a página Galeria, seus atalhos e o gerenciamento de fotos dela no painel, preservando os registros antigos.
+- [x] Testar as páginas e o painel, remover a foto temporária de teste e salvar a versão no GitHub.
+
 - [x] Corrigir a exibição pública dos vídeos e patrocinadores cadastrados, verificar as mídias reais e salvar no GitHub.
 - [ ] Conferir a correção no domínio principal — publicação solicitada; aguarda disponibilização da nova entrega de mídias e atualização automática da Vercel.
 

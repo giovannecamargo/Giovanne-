@@ -29,6 +29,21 @@ describe("public media verification", () => {
     expect(Object.keys(result)).toEqual(["sponsors/live.png", "videos/live.mp4"]);
   });
 
+  it("signs the published photo tagged Sobre", async () => {
+    mocks.createClient.mockImplementation(() => ({ from: (table: string) => {
+      const query = {
+        select: () => query, in: () => query, lte: () => query, gt: () => query,
+        then: (resolve: (value: unknown) => unknown) => Promise.resolve(resolve({ error: null, data: table === "photos" ? [{ url: "sobre/current.jpg" }] : [] })),
+      };
+      return query;
+    } }));
+
+    const result = await signPublishedMedia({ paths: ["sobre/current.jpg"] });
+
+    expect(mocks.createSignedUrls).toHaveBeenCalledWith(["sobre/current.jpg"], 21600);
+    expect(Object.keys(result)).toEqual(["sobre/current.jpg"]);
+  });
+
   it("does not access storage for an unpublished file", async () => {
     expect(await signPublishedMedia({ paths: ["private/secret.png"] })).toEqual({});
     expect(mocks.createSignedUrls).not.toHaveBeenCalled();

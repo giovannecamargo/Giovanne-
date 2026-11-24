@@ -3,12 +3,16 @@ import { ArrowRight } from "lucide-react";
 import { photos } from "@/data/site";
 import { bio } from "@/data/bio";
 import { btnOutline, d, SectionTitle } from "@/components/site-ui";
+import { usePhotos } from "@/lib/content";
+import { aboutPhotoSource } from "@/lib/about-photo";
 
 export function About() {
+  const { data = [] } = usePhotos("sobre");
+  const aboutPhoto = aboutPhotoSource(data, photos.pb);
   return (
     <>
       <section className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-14 pt-32 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <img src={photos.pb} width={851} height={1849} alt="Giovanne Camargo em apresentação" loading="eager" fetchPriority="high" decoding="async" className="reveal-img aspect-[4/5] w-full rounded-sm object-cover object-top" />
+        <img src={aboutPhoto} width={851} height={1849} alt="Giovanne Camargo em apresentação" loading="eager" fetchPriority="high" decoding="async" className="reveal-img aspect-[4/5] w-full rounded-sm object-cover object-top" />
         <div>
           <SectionTitle eyebrow="Biografia" title="Sobre o Artista" />
           <p className="reveal mt-2 text-lg leading-relaxed text-foreground/90 sm:text-xl" style={d(3)}>{bio.lead}</p>

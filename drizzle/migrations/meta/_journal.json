@@ -113,6 +113,13 @@
       "when": 1795556521863,
       "tag": "0015_restrict_published_media_signing",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1795563901717,
+      "tag": "0016_allow_about_photo_section",
+      "breakpoints": true
     }
   ]
 }
