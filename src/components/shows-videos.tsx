@@ -35,10 +35,10 @@ function VideoCard({ src, poster, caption }: { src: string; poster?: string; cap
   return (
     <figure className="group min-w-0">
       <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-card ring-1 ring-border transition duration-500 group-hover:-translate-y-1 group-hover:ring-primary/50 sm:aspect-video motion-reduce:transform-none">
-        {poster && !playing && <img src={poster} alt="" aria-hidden loading="lazy" className="absolute inset-0 size-full scale-110 object-cover opacity-40 blur-2xl" />}
+        {poster && !playing && <img src={poster} alt="" aria-hidden loading="lazy" className="absolute inset-0 z-[1] size-full object-cover" style={{ objectPosition: caption === "Giovanne Camargo" ? "center top" : "center 25%" }} />}
         <video ref={ref} className="relative block size-full object-contain" src={src} poster={poster} controls={playing} playsInline preload="none" aria-label={caption} onPlay={() => setPlaying(true)} />
         {!playing && (
-          <button type="button" onClick={start} aria-label={`Reproduzir ${caption}`} className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-background/70 via-transparent to-transparent">
+          <button type="button" onClick={start} aria-label={`Reproduzir ${caption}`} className="absolute inset-0 z-10 flex items-center justify-center bg-gradient-to-t from-background/70 via-transparent to-transparent">
             <span className="flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition duration-300 group-hover:scale-110 motion-reduce:transform-none sm:size-[4.5rem]">
               <Play className="ml-1 size-7 fill-current" />
             </span>
